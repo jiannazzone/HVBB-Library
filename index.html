@@ -41,14 +41,14 @@
                 <h1>HVBB Game Library</h1>
             </div>
         </div>
+
         <div class="row">
             <div class="col-offset-1 col-11">
-                <div class="input-group mb-3">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Game</span>
-                    <input type="text" id="gameInput" class="form-control" autocomplete="off" onkeyup="makeAPIcall(this.value)">
-                    <button class="btn btn-primary" type="button" id="button-addon2">Submit</button>
+                <div class="input-group mb-3 autocompleteSearch">
+                    <input type="text" id="gameInput" class="form-control" autocomplete="off" onkeyup="makeAPIcall(this.value)" placeholder="Game Title">
+                    <button class="btn btn-light" type="button" onclick="clearSearch('gameInput')"><i class="bi bi-x-square"></i></button>
                 </div>
-                <div id="searchResults"></div>
+                <div class="inputDropdown" id="gameSearchResults"></div>
             </div>
         </div>
 

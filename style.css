@@ -1,4 +1,7 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
+
+/* General site stylings */
+
 body {
     background-color: darkolivegreen;
 }
@@ -19,12 +22,22 @@ a.navbar-brand>img {
     padding-right: 10px;
 }
 
-.input-group-text {
-    color: darkolivegreen
+
+/* Search Results Styling */
+
+.resultItem {
+    padding: 5px 10px 5px 10px;
 }
 
-.autocomplete {
-    /*the container must be positioned relative:*/
-    position: relative;
-    display: inline-block;
+.resultItem:hover {
+    background-color: darkolivegreen;
+    color: white;
+    border-radius: 5px;
+}
+
+.inputDropdown {
+    background-color: white;
+    border: 2px solid whitesmoke;
+    border-radius: 5px;
+    visibility: hidden;
 }
