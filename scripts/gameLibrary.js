@@ -1,11 +1,12 @@
 var activeGame = "";
+var gameList = {};
 
 function makeAPIcall(val) {
     let thisUrl = "https://boardgamegeek.com/xmlapi2/search?type=boardgame,boardgameexpansion&query=" + val;
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
+    xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            createGameList(this);
+            setTimeout(() => { createGameList(this);}, 500);
         }
     };
     xmlhttp.open("GET", thisUrl, true);
@@ -14,15 +15,16 @@ function makeAPIcall(val) {
 
 function createGameList(xml) {
 
+    gameList = {};
     // Prepare UI by hiding previous results
     const gameSearchResults = document.getElementById("gameSearchResults");
     gameSearchResults.style.visibility = "hidden";
     gameSearchResults.style.borderStyle = "none";
+    document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
 
     // Clear all child divs inside gameSearchResults
     clearDiv(gameSearchResults);
 
-    let gameList = {};
     let x, i, xmlDoc, txt;
     xmlDoc = xml.responseXML;
     x = xmlDoc.getElementsByTagName("item");
@@ -45,18 +47,19 @@ function createGameList(xml) {
     // Show the results
     gameSearchResults.style.visibility = "visible";
     gameSearchResults.style.borderStyle = "solid";
+    document.getElementById("clearButton").removeAttribute("disabled");
 
     // Handle click on search results
     const filteredGames = document.getElementsByClassName("resultItem");
     for (game of filteredGames) {
-        game.addEventListener("click", function() { selectGame(this, gameSearchResults) });
+        game.addEventListener("click", function () { selectGame(this, gameSearchResults) });
     }
 }
 
 function selectGame(game, resultsDiv) {
     activeGame = game.innerHTML;
     document.getElementById("gameInput").value = activeGame;
-    console.log(activeGame)
+    document.getElementById("addButton").removeAttribute("disabled");
 
     // Reset UI
     clearDiv(resultsDiv);
@@ -79,7 +82,21 @@ function clearSearch(inputId) {
     gameSearchResults.style.visibility = "hidden";
     gameSearchResults.style.borderStyle = "none";
 
+    // Disable buttons
+    document.getElementById("clearButton").setAttributeNode(document.createAttribute("disabled"));
+    document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
+
     // Clear all child divs inside gameSearchResults
     clearDiv(gameSearchResults);
 
+}
+
+function addGame() {
+    const thisGame = document.getElementById("gameInput").value;
+    console.log(thisGame);
+
+    // Reset search UI after adding game
+    document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
+    document.getElementById("clearButton").setAttributeNode(document.createAttribute("disabled"));
+    document.getElementById("gameInput").value = "";
 }

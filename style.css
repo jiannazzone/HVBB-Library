@@ -1,7 +1,6 @@
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css");
 
 /* General site stylings */
-
 body {
     background-color: darkolivegreen;
 }
@@ -39,5 +38,6 @@ a.navbar-brand>img {
     background-color: white;
     border: 2px solid whitesmoke;
     border-radius: 5px;
-    visibility: hidden;
+    visibility: collapse;
+    margin-top: 5px;
 }

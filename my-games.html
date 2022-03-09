@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
 
 <head>
@@ -35,7 +35,7 @@
             <div class="collapse navbar-collapse" id="navbarNav"></div>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="my-games.html">My Games</a>
+                    <a class="nav-link active" href="my-games.html">My Games</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Log In <i class="bi bi-person-fill"></i> </a>
@@ -55,12 +55,22 @@
 
         <div class="row">
             <div class="col-offset-1 col-11">
-                Blah blah blah
+                <div class="input-group autocompleteSearch has-clear">
+                    <input type="text" id="gameInput" class="form-control" autocomplete="off"
+                        onkeyup="makeAPIcall(this.value)" placeholder="Game Title">
+                    <button class="btn btn-danger" type="button" onclick="clearSearch('gameInput')" id="clearButton" disabled>
+                        <i class="bi bi-x-square"></i>
+                    </button>
+                    <button class="btn btn-primary" type="button" onclick="addGame()" id="addButton" disabled>
+                        Add Game
+                    </button>
+                </div>
+                <div class="inputDropdown" id="gameSearchResults"></div>
             </div>
         </div>
 
     </div>
-
+    <script src="scripts/gameLibrary.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
