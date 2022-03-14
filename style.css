@@ -44,4 +44,13 @@ a.navbar-brand>img {
 
 #game-image {
     width: 100%;
+    border-radius: 10px;
+}
+
+.row {
+    margin: 10px 0px 10px 0px;
+}
+
+#data-source {
+    margin: 10px 0px 10px 0px;
 }

@@ -22,7 +22,7 @@
         <![endif]-->
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand navbar-light">
+    <nav class="navbar navbar-expand-md navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
                 <img src="assets/logo.png" height="36" class="d-inline-block align-text-top"> Hudson Valley Boards and
@@ -33,37 +33,22 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav"></div>
-            <!-- <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="my-games.html">My Games</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Log In <i class="bi bi-person-fill"></i> </a>
-                </li>
-            </ul> -->
-        </div>
         </div>
     </nav>
 
     <!-- Main Container -->
     <div class="container">
-        
-        <!-- Page Header -->
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1>Game Details</h1>
-            </div>
-        </div>
 
         <!-- Game Details -->
-        <div class="row" id="game-details-row">
+        <div class="row"">
             <div class="col-offset-1 col-md-5">
-                <h2 id="game-title"></h2>
-                <h3 id="player-count"><i class="bi bi-person-fill"></i></h3>
-
+                <h1 id="game-title">Game Details</h1>
+                <h2 id="player-count"><i class="bi bi-person-fill"></i></h2>
+                <h2 id="play-time"><i class="bi bi-stopwatch-fill"></i></h2>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 text-center">
                 <img id="game-image" src="" alt="">
+                <a class="btn btn-light" href="" role="button" id="data-source" target="_blank">Data from BoardGameGeek</a>
             </div>
         </div>
 

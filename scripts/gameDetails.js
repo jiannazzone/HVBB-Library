@@ -16,7 +16,6 @@ function makeAPIcall() {
 }
 
 function getGameDetails(xml) {
-
     const xmlDoc = xml.responseXML;
     const x = xmlDoc.getElementsByTagName('item')[0];
 
@@ -32,4 +31,21 @@ function getGameDetails(xml) {
     // Player Count
     const playerCount = document.getElementById('player-count');
     playerCount.innerHTML += ` ${x.getElementsByTagName('minplayers')[0].getAttribute("value")} - ${x.getElementsByTagName('maxplayers')[0].getAttribute("value")} Players`;
+
+    // Play Time
+    const playTime = document.getElementById('play-time');
+    const minTime = x.getElementsByTagName('minplaytime')[0].getAttribute("value");
+    const maxTime = x.getElementsByTagName('maxplaytime')[0].getAttribute("value");
+    let playTimeText;
+    if (minTime != maxTime) {
+        playTimeText = ` ${minTime} - ${maxTime} Min`;
+    } else {
+        playTimeText = ` ${minTime} Min`;
+    }
+    playTime.innerHTML += playTimeText;
+
+    // Source Info
+    const sourceButton = document.getElementById('data-source');
+    let sourceURL = `https://boardgamegeek.com/boardgame/${x.id}`;
+    sourceButton.href = sourceURL;
 }

@@ -1,4 +1,4 @@
-var activeGame = "";
+// var activeGame = "";
 var gameList = {};
 var thisUserGames = [];
 
@@ -21,7 +21,7 @@ function createGameList(xml) {
     const gameSearchResults = document.getElementById("gameSearchResults");
     gameSearchResults.style.visibility = "hidden";
     gameSearchResults.style.borderStyle = "none";
-    document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
+    // document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
 
     // Clear all child divs inside gameSearchResults
     clearDiv(gameSearchResults);
@@ -59,8 +59,8 @@ function createGameList(xml) {
 
 function selectGame(game, resultsDiv) {
     activeGameID = game.id;
-    document.getElementById("gameInput").value = activeGame;
-    document.getElementById("addButton").removeAttribute("disabled");
+    // document.getElementById("gameInput").value = activeGame;
+    // document.getElementById("addButton").removeAttribute("disabled");
 
     // Reset UI
     window.open(`game-info.html?id=${activeGameID}`, "_self")
@@ -86,7 +86,7 @@ function clearSearch(inputId) {
 
     // Disable buttons
     document.getElementById("clearButton").setAttributeNode(document.createAttribute("disabled"));
-    document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
+    // document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
 
     // Clear all child divs inside gameSearchResults
     clearDiv(gameSearchResults);
