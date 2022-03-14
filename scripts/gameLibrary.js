@@ -1,12 +1,13 @@
 var activeGame = "";
 var gameList = {};
+var thisUserGames = [];
 
 function makeAPIcall(val) {
     let thisUrl = "https://boardgamegeek.com/xmlapi2/search?type=boardgame,boardgameexpansion&query=" + val;
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            setTimeout(() => { createGameList(this);}, 500);
+            setTimeout(() => { createGameList(this); }, 500);
         }
     };
     xmlhttp.open("GET", thisUrl, true);
@@ -57,11 +58,12 @@ function createGameList(xml) {
 }
 
 function selectGame(game, resultsDiv) {
-    activeGame = game.innerHTML;
+    activeGameID = game.id;
     document.getElementById("gameInput").value = activeGame;
     document.getElementById("addButton").removeAttribute("disabled");
 
     // Reset UI
+    window.open(`game-info.html?id=${activeGameID}`, "_self")
     clearDiv(resultsDiv);
     resultsDiv.style.visibility = "hidden";
     gameList = {};
@@ -89,14 +91,4 @@ function clearSearch(inputId) {
     // Clear all child divs inside gameSearchResults
     clearDiv(gameSearchResults);
 
-}
-
-function addGame() {
-    const thisGame = document.getElementById("gameInput").value;
-    console.log(thisGame);
-
-    // Reset search UI after adding game
-    document.getElementById("addButton").setAttributeNode(document.createAttribute("disabled"));
-    document.getElementById("clearButton").setAttributeNode(document.createAttribute("disabled"));
-    document.getElementById("gameInput").value = "";
 }
