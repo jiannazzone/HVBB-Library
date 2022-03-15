@@ -62,22 +62,27 @@ nav {
 }
 
 #game-image {
-    width: 100%;
-    border-radius: 10px;
+    max-height: 500px;
+    border-radius: 5px;
     box-shadow: 0px 2px;
     background-color: white;
 }
 
 .game-detail-card {
     background-color: white;
-    border-radius: 10px;
+    border-radius: 5px;
     color: darkolivegreen;
-    padding: 10px;
+    padding: 5px 10px 5px 10px;
     box-shadow: 0px 2px black;
     text-align: end;
+    width: 100%;
 }
 
 a#data-source {
     padding: 10px;
     box-shadow: 0px 2px black;
+}
+
+#game-detail-row {
+    max-height: 500px;
 }

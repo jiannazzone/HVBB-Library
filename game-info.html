@@ -28,11 +28,6 @@
                 <img src="assets/logo.png" height="36" class="d-inline-block align-text-top"> Hudson Valley Boards and
                 Brews
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav"></div>
         </div>
     </nav>
 
@@ -40,11 +35,11 @@
     <div class="container">
 
         <!-- Game Details -->
-        <div class="row">
-            <div class="col-offset-1 col-md-5">
+        <div class="row" id="game-detail-row">
+            <div class="col-offset-1 col-md-5 d-md-flex flex-column align-items-end">
                 <h1 id="game-title"></h1>
                 <h4 id="game-designer"></h4>
-                <h2 id="rating" class="game-detail-card"><i class="bi bi-star-fill"></i></h2>
+                <h2 id="rating" class="game-detail-card"><i class="bi bi-star-fill" id="rating-star"></i></h2>
                 <h2 id="player-count" class="game-detail-card"><i class="bi bi-person-fill"></i></h2>
                 <h2 id="play-time" class="game-detail-card"><i class="bi bi-stopwatch-fill"></i></h2>
             </div>
