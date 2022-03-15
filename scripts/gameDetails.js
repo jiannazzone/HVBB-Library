@@ -8,7 +8,7 @@ function makeAPIcall() {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            setTimeout(() => { getGameDetails(this); }, 500);
+            getGameDetails(this);
         }
     };
     xmlhttp.open("GET", thisUrl, true);
@@ -18,24 +18,26 @@ function makeAPIcall() {
 function getGameDetails(xml) {
     const xmlDoc = xml.responseXML;
     const x = xmlDoc.getElementsByTagName('item')[0];
+    const colorScale = ['darkgreen', 'darkgoldenrod', 'darkorange', 'darkred']; // Colors for game ratings
 
     // Title
     const gameTitle = document.getElementById('game-title');
     gameTitle.innerHTML = x.getElementsByTagName("name")[0].getAttribute("value");
+    document.title = x.getElementsByTagName("name")[0].getAttribute("value");
 
     // Rating
     const rating = document.getElementById('rating');
     const gameRating = Number(x.getElementsByTagName('statistics')[0].getElementsByTagName('ratings')[0].getElementsByTagName('average')[0].getAttribute('value'));
     rating.innerHTML += ` ${gameRating.toFixed(1)} / 10`;
+    rating.style.color = 'white';
     if (gameRating >= 8) {
-        rating.style.backgroundColor = 'darkgreen';
-        rating.style.color = 'white';
+        rating.style.backgroundColor = colorScale[0];
     } else if (gameRating >= 6) {
-        rating.style.backgroundColor = 'gold';
+        rating.style.backgroundColor = colorScale[1];
     } else if (gameRating >= 4) {
-        rating.style.backgroundColor = 'darkorange'
+        rating.style.backgroundColor = colorScale[2];
     } else {
-        rating.style.backgroundColor = 'darkred';
+        rating.style.backgroundColor = colorScale[3];
     }
 
     // Image
@@ -45,14 +47,14 @@ function getGameDetails(xml) {
 
     // Player Count
     const playerCount = document.getElementById('player-count');
-    playerCount.innerHTML += ` ${x.getElementsByTagName('minplayers')[0].getAttribute("value")} - ${x.getElementsByTagName('maxplayers')[0].getAttribute("value")} Players`;
+    playerCount.innerHTML += ` ${x.getElementsByTagName('minplayers')[0].getAttribute('value')} - ${x.getElementsByTagName('maxplayers')[0].getAttribute('value')} Players`;
 
     // Play Time
     const playTime = document.getElementById('play-time');
     const minTime = x.getElementsByTagName('minplaytime')[0].getAttribute("value");
     const maxTime = x.getElementsByTagName('maxplaytime')[0].getAttribute("value");
     let playTimeText;
-    if (minTime != maxTime) {
+    if (Number(minTime) != Number(maxTime)) {
         playTimeText = ` ${minTime} - ${maxTime} Min`;
     } else {
         playTimeText = ` ${minTime} Min`;

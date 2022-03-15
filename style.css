@@ -42,11 +42,6 @@ a.navbar-brand>img {
     margin-top: 5px;
 }
 
-#game-image {
-    width: 100%;
-    border-radius: 10px;
-}
-
 .row {
     margin: 0px 0px 10px 0px;
 }
@@ -59,10 +54,31 @@ nav {
     margin-bottom: 10px;
 }
 
+/* Game Details */
+
+#game-title {
+    text-align: end;
+    text-shadow: 0px 2px black;
+}
+
+#game-image {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 2px;
+    background-color: white;
+}
+
 .game-detail-card {
     background-color: white;
-    border: 2px solid whitesmoke;
+    /* border: 2px solid whitesmoke; */
     border-radius: 10px;
     color: darkolivegreen;
-    padding: 5px;
+    padding: 10px;
+    box-shadow: 0px 2px black;
+    text-align: end;
+}
+
+a#data-source {
+    padding: 10px;
+    box-shadow: 0px 2px black;
 }
