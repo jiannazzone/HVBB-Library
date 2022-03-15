@@ -62,6 +62,7 @@ nav {
 }
 
 #game-image {
+    aspect-ratio: initial;
     max-height: 500px;
     border-radius: 5px;
     box-shadow: 0px 2px;
