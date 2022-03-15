@@ -22,8 +22,18 @@ function getGameDetails(xml) {
 
     // Title
     const gameTitle = document.getElementById('game-title');
-    gameTitle.innerHTML = x.getElementsByTagName("name")[0].getAttribute("value");
-    document.title = x.getElementsByTagName("name")[0].getAttribute("value");
+    gameTitle.innerHTML = x.getElementsByTagName('name')[0].getAttribute('value');
+    document.title = x.getElementsByTagName('name')[0].getAttribute('value');
+
+    // Designer
+    const designedBy = document.getElementById('game-designer');
+    const allLinks = x.getElementsByTagName('link');
+    for (let i = 0; i < allLinks.length; i++) {
+        if (allLinks[i].getAttribute('type') == 'boardgamedesigner') {
+            designedBy.innerHTML = `Designed by:<br>${allLinks[i].getAttribute('value')}`;
+            break;
+        }
+    }
 
     // Rating
     const rating = document.getElementById('rating');
