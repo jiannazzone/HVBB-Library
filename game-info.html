@@ -25,9 +25,13 @@
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="index.html">
-                <img src="assets/logo.png" height="36" class="d-inline-block align-text-top"> Hudson Valley Boards and
-                Brews
+                <img src="assets/logo.png" height="36" class="d-inline-block align-text-top"> HVBB
             </a>
+            <ul class="navbar-nav me-2">
+                <li class="nav-item">
+                    <a class="nav-link" href="game-search.html"><i class="bi bi-search"></i> Search</a>
+                </li>
+            </ul>
         </div>
     </nav>
 
@@ -39,9 +43,10 @@
             <div class="col-offset-1 col-md-5 d-md-flex flex-column align-items-end">
                 <h1 id="game-title"></h1>
                 <h4 id="game-designer"></h4>
-                <h2 id="rating" class="game-detail-card"><i class="bi bi-star-fill" id="rating-star"></i></h2>
-                <h2 id="player-count" class="game-detail-card"><i class="bi bi-person-fill"></i></h2>
-                <h2 id="play-time" class="game-detail-card"><i class="bi bi-stopwatch-fill"></i></h2>
+                <h2 id="rating" class="game-detail-card" title="BGG Rating"><i class="bi bi-star-fill"></i></h2>
+                <h2 id="complexity" class="game-detail-card" title="BGG Complexity"><i class="bi bi-emoji-dizzy-fill"></i></h2>
+                <h2 id="player-count" class="game-detail-card" title="Player Count"><i class="bi bi-person-fill"></i></h2>
+                <h2 id="play-time" class="game-detail-card" title="Play Time"><i class="bi bi-stopwatch-fill"></i></h2>
             </div>
             <div class="col-md-6 text-center">
                 <img id="game-image" src="" alt="">

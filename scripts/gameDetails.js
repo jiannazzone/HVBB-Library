@@ -50,6 +50,11 @@ function getGameDetails(xml) {
         rating.style.backgroundColor = colorScale[3];
     }
 
+    // Complexity
+    const complexity = document.getElementById('complexity');
+    const gameComplexity = Number(x.getElementsByTagName('statistics')[0].getElementsByTagName('ratings')[0].getElementsByTagName('averageweight')[0].getAttribute('value'));
+    complexity.innerHTML += ` ${gameComplexity.toFixed(1)} / 5`;
+
     // Image
     const gameImage = document.getElementById('game-image');
     gameImage.src = x.getElementsByTagName('image')[0].innerHTML;

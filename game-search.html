@@ -29,7 +29,7 @@
             </a>
             <ul class="navbar-nav me-2">
                 <li class="nav-item">
-                    <a class="nav-link" id="searchIcon" href="game-search.html"><i class="bi bi-search"></i> Search</a>
+                    <a class="nav-link active" href="game-search.html"><i class="bi bi-search"></i> Search</a>
                 </li>
             </ul>
         </div>
@@ -39,13 +39,24 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1 class="display-1">Hudson Valley Boards and Brews</h1>
+                <h1>Board Game Geek Database</h1>
             </div>
         </div>
 
         <div class="row">
-            <div class="offset-md-1 col-md-11">
-                Test
+            <div class="col-offset-1 col-11">
+                <div class="input-group autocompleteSearch has-clear">
+                    <input type="text" id="gameInput" class="form-control" autocomplete="off"
+                        onkeyup="makeAPIcall(this.value)" placeholder="Game Title">
+                    <button class="btn btn-danger" type="button" onclick="clearSearch('gameInput')" id="clearButton"
+                        disabled>
+                        <i class="bi bi-x-square"></i>
+                    </button>
+                    <!-- <button class="btn btn-primary" type="button" onclick="addGame()" id="addButton" disabled>
+                        Add Game
+                    </button> -->
+                </div>
+                <div class="inputDropdown" id="gameSearchResults"></div>
             </div>
         </div>
 
