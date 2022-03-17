@@ -1,11 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
-import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { getFirestore, collection, getDocs, getDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 const firebaseConfig = {
     apiKey: "AIzaSyCQvqEt6hosrhuWSKsUojtsxo9LSXttn5s",
     authDomain: "hvbb-game-list.firebaseapp.com",
@@ -20,16 +15,103 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-getUsers(db);
+
+// User Class
+class User {
+    constructor(first, last, color, gamesOwned) {
+        this.first = first;
+        this.last = last;
+        this.color = color;
+    }
+}
+
+// User Converter
+const userConverter = {
+    toFirestore: (user) => {
+        return {
+            name: {
+                first: user.first,
+                last: user.last
+            },
+            color: user.color,
+        }
+    },
+    fromFirestore: (snapshot, options) => {
+        const data = snapshot.data(options);
+        return new User(data.name[first], data.name[last], data.color, data.gamesOwned);
+    }
+};
+// Game Class
+class Game {
+    constructor(bggID, bggName, owners) {
+        this.bggID = bggID;
+        this.bggName = bggName;
+        this.owners = owners;
+    }
+}
+// Game Converter
+const gameConverter = {
+    toFirestore: (game) => {
+        return {
+            bggID: game.bggID,
+            bggName: game.bggName,
+            owners: game.owners
+        }
+    },
+    fromFirestore: (snapshot, options) => {
+        const data = snapshot.data(options);
+        return new Game(data.bggID, data.bggName, data.owners);
+    }
+};
 
 async function getUsers(db) {
-    const userSnapshot = await getDocs(collection(db, 'users'));
-    userSnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
+    let allGames = [];
+    const userRef = collection(db, 'users');
+    const userSnap = await getDocs(userRef);
+    userSnap.forEach((doc) => {
+        if (doc.exists()) {
+            const thisGame = new Game(doc.data().bggID, doc.data().bggName);
+            thisGame.owners = getGameOwners(doc.data().owners)
+            allGames.push(thisGame);
+        } else {
+            console.log('No document.');
+        }
     });
+    console.log(allUsers);
+    retrieveUserGames(db, allGames);
+}
 
-    const gameSnapshot = await getDocs(collection(db, 'games'));
-    gameSnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
-    });
+async function retrieveUserGames(db, allUsers) {
+    // Try printing out all the games
+    const firstUser = allUsers[0];
+    const data = await getDoc(firstUser.gamesOwned[0]);
+    console.log(data.data());
+}
+
+async function getGameOwners(ownerRefs) {
+    let allOwners = [];
+    // console.log(ownerRefs);
+    for (const ownerRef of ownerRefs) {
+        const ownerData = await getDoc(ownerRef);
+        allOwners.push(ownerData.data());
+    }
+    return allOwners;
+}
+
+export async function getAllGames() {
+    // Get all games in the database, and display along with who owns them
+    let allGames = []; // Stored as Game objects
+    const gameRef = collection(db, 'games').withConverter(gameConverter);
+    const gameSnap = await getDocs(gameRef);
+
+    for (const game of gameSnap.docs) {
+        if (game.exists()) {
+            const thisGame = new Game(game.data().bggID, game.data().bggName);
+            thisGame.owners = await getGameOwners(game.data().owners)
+            allGames.push(thisGame);
+        } else {
+            console.log('No document found.');
+        }
+    }
+    return allGames;
 }

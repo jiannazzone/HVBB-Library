@@ -87,3 +87,10 @@ a#data-source {
 #game-detail-row {
     max-height: 500px;
 }
+
+/* Game List Styling */
+span.game-owner {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 2px;
+}
