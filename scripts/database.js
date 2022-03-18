@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
-import { getFirestore, collection, getDocs, getDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, query, where, limit } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 const firebaseConfig = {
     apiKey: "AIzaSyCQvqEt6hosrhuWSKsUojtsxo9LSXttn5s",
     authDomain: "hvbb-game-list.firebaseapp.com",
@@ -88,7 +88,7 @@ async function retrieveUserGames(db, allUsers) {
     console.log(data.data());
 }
 
-async function getGameOwners(ownerRefs) {
+export async function getGameOwners(ownerRefs) {
     let allOwners = [];
     // console.log(ownerRefs);
     for (const ownerRef of ownerRefs) {
@@ -114,4 +114,11 @@ export async function getAllGames() {
         }
     }
     return allGames;
+}
+
+export async function getThisGame(bggID) {
+    const gameRef = collection(db, 'games').withConverter(gameConverter);
+    const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
+    const querySnap = await getDocs(q);
+    return querySnap.docs[0].data();
 }

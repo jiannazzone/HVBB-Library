@@ -1,5 +1,9 @@
 // Load game details from Board Game Geek
 
+import { getThisGame, getGameOwners } from "./database.js";
+
+makeAPIcall();
+
 function makeAPIcall() {
     const params = new URLSearchParams(location.search);
     const gameID = params.get('id');
@@ -15,7 +19,7 @@ function makeAPIcall() {
     xmlhttp.send();
 }
 
-function getGameDetails(xml) {
+async function getGameDetails(xml) {
     const xmlDoc = xml.responseXML;
     const x = xmlDoc.getElementsByTagName('item')[0];
     const colorScale = ['darkgreen', 'darkgoldenrod', 'darkorange', 'darkred']; // Colors for game ratings
@@ -30,7 +34,7 @@ function getGameDetails(xml) {
     const allLinks = x.getElementsByTagName('link');
     for (let i = 0; i < allLinks.length; i++) {
         if (allLinks[i].getAttribute('type') == 'boardgamedesigner') {
-            designedBy.innerHTML = `Designed by:<br>${allLinks[i].getAttribute('value')}`;
+            designedBy.innerHTML = `Designed by: ${allLinks[i].getAttribute('value')}`;
             break;
         }
     }
@@ -59,6 +63,7 @@ function getGameDetails(xml) {
     const gameImage = document.getElementById('game-image');
     gameImage.src = x.getElementsByTagName('image')[0].innerHTML;
     gameImage.alt = `${gameTitle.innerHTML} Box Art`;
+    gameImage.onclick = function() {window.open(`https://boardgamegeek.com/boardgame/${x.id}`,'_blank')};
 
     // Player Count
     const playerCount = document.getElementById('player-count');
@@ -76,8 +81,19 @@ function getGameDetails(xml) {
     }
     playTime.innerHTML += playTimeText;
 
-    // Source Info
-    const sourceButton = document.getElementById('data-source');
-    let sourceURL = `https://boardgamegeek.com/boardgame/${x.id}`;
-    sourceButton.href = sourceURL;
+    // Owners
+    const params = new URLSearchParams(location.search);
+    const gameID = params.get('id');
+
+    // Get owners from Firestore
+    const thisGame = await getThisGame(gameID);
+    const gameOwners = await getGameOwners(thisGame.owners);
+    // Create HTML elements
+
+    const ownersDiv = document.getElementById('game-owners-card');
+    let ownersHTML = '';
+    gameOwners.forEach((owner) => {
+        ownersHTML += `<span class="game-owner" style="background-color:${owner.color}; border:1px solid darkolivegreen;">${owner.name['first']} ${owner.name['last'].slice(0,1)}</span>`
+    });
+    ownersDiv.innerHTML += ownersHTML;
 }

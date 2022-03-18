@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="makeAPIcall()">
+<body id="game-info-page">
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -39,21 +39,32 @@
     <div class="container">
 
         <!-- Game Details -->
-        <div class="row" id="game-detail-row">
-            <div class="col-offset-1 col-md-5 d-md-flex flex-column align-items-end">
+        <div class="row">
+            <div class="col-offset-1 col-11">
                 <h1 id="game-title"></h1>
                 <h4 id="game-designer"></h4>
-                <h2 id="rating" class="game-detail-card" title="BGG Rating"><i class="bi bi-star-fill"></i></h2>
-                <h2 id="complexity" class="game-detail-card" title="BGG Complexity"><i class="bi bi-speedometer"></i>
-                </h2>
-                <h2 id="player-count" class="game-detail-card" title="Player Count"><i class="bi bi-person-fill"></i>
-                </h2>
-                <h2 id="play-time" class="game-detail-card" title="Play Time"><i class="bi bi-stopwatch-fill"></i></h2>
             </div>
-            <div class="col-md-6 text-center">
-                <div class="col"><img id="game-image" src="" alt=""></div>
-                <a class="btn btn-light" href="" role="button" id="data-source" target="_blank">Data from
-                    BoardGameGeek</a>
+        </div>
+        <div class="row" id="game-detail-row">
+            <div class="col-offset-1 col-md-5 d-md-flex flex-column align-items-end">
+                <h2 id="rating" class="game-detail-card" title="BGG Rating">
+                    <i class="bi bi-star-fill"></i>
+                </h2>
+                <h2 id="complexity" class="game-detail-card" title="BGG Complexity">
+                    <i class="bi bi-speedometer"></i>
+                </h2>
+                <h2 id="player-count" class="game-detail-card" title="Player Count">
+                    <i class="bi bi-person-fill"></i>
+                </h2>
+                <h2 id="play-time" class="game-detail-card" title="Play Time">
+                    <i class="bi bi-stopwatch-fill"></i>
+                </h2>
+                <div class="game-detail-card" id="game-owners-card">
+                    <h2>Owners</h2>
+                </div>
+            </div>
+            <div class="col-md-6 text-center" id="image-col">
+                <img class="img-fluid" id="game-image" src="" alt="">
             </div>
         </div>
 
@@ -62,7 +73,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
         </script>
-    <script src="scripts/gameDetails.js"></script>
+    <script src="scripts/gameDetails.js" type="module"></script>
 </body>
 
 </html>
