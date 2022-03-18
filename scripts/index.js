@@ -9,7 +9,7 @@ let tableHTML = '';
 allGames.forEach((game) => {
     
     // Add game name to left column
-    tableHTML += `<tr class="game-row"><td class="game-name">${game.bggName}</td><td>`;
+    tableHTML += `<tr class="game-row"><td class="game-name" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td>`;
 
     // Add owners to right column. Each owner in a span with appropriate coloring
     let ownersHTML = '';
@@ -19,5 +19,3 @@ allGames.forEach((game) => {
     tableHTML += `${ownersHTML}</td></tr>`;
 });
 tableBodyHTML.innerHTML = tableHTML;
-
-// 

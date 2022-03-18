@@ -94,3 +94,7 @@ span.game-owner {
     border-radius: 5px;
     margin: 2px;
 }
+
+td.game-name, span.game-owner {
+    cursor: pointer;
+}
