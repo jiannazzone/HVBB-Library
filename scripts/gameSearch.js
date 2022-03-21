@@ -113,3 +113,9 @@ function clearSearch(inputId) {
     clearDiv(gameSearchResults);
 
 }
+
+function toggleSearch() {
+    const gameSearchBox = document.getElementById('game-search-input');
+    const searchIcon = document.getElementById('searchIcon');
+    searchIcon.style.borderRadius = '0px 4px 4px 0px';
+}

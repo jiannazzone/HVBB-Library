@@ -7,10 +7,7 @@ body {
 
 .navbar {
     background-color: lightgray;
-}
-
-nav>.container-fluid>i {
-    padding-left: 5px;
+    z-index: 0;
 }
 
 h1, h2, h3, h4 {
@@ -20,7 +17,6 @@ h1, h2, h3, h4 {
 a.navbar-brand>img {
     padding-right: 10px;
 }
-
 
 /* Search Results Styling */
 
@@ -40,6 +36,8 @@ a.navbar-brand>img {
     border-radius: 5px;
     visibility: collapse;
     margin-top: 5px;
+    z-index: 1;
+    max-height: 100vh;
 }
 
 .row {
@@ -94,7 +92,7 @@ span.game-owner {
     border-radius: 5px;
     margin: 2px;
     width: auto;
-    border: 1px solid darkolivegreen;
+    border: 1px solid black;
 }
 
 td.game-name, td.game-owners, span.game-owner {
@@ -112,4 +110,10 @@ td.game-name, td.game-owners, span.game-owner {
 #game-owners-card>h2 {
     text-align: end;
     color: darkolivegreen;
+}
+
+/* Login styling */
+div#auth-modal {
+    /* z-index: 1; */
+    box-shadow: 0px 0px 10px 20px;
 }
