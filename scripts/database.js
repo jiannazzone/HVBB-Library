@@ -18,7 +18,7 @@ const db = getFirestore(app);
 
 // User Class
 class User {
-    constructor(first, last, color, gamesOwned) {
+    constructor(first, last, color) {
         this.first = first;
         this.last = last;
         this.color = color;

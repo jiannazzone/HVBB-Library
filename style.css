@@ -18,6 +18,15 @@ a.navbar-brand>img {
     padding-right: 10px;
 }
 
+/* Log In Modal Styling */
+#display-name-color-modal-form {
+    display: none;
+}
+
+#email-password-modal-form {
+    display: block;
+}
+
 /* Search Results Styling */
 
 .resultItem {

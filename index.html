@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
 <html>
 
 <head>
@@ -69,14 +69,17 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
+                
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Log In/Register</h5>
                     <button type="button" class="btn close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true"><i class="bi bi-x-square"></i></span>
                     </button>
                 </div>
+
                 <div class="modal-body">
-                    <form>
+                    <form id="email-password-modal-form">
+                        <legend class="text-danger">All Fields Required</legend>
                         <div class="mb-3">
                             <input type="email" class="form-control" id="email-input" placeholder="Email">
                         </div>
@@ -84,7 +87,19 @@
                             <input type="password" class="form-control" id="password-input" placeholder="Password">
                         </div>
                     </form>
+
+                    <form id="display-name-color-modal-form">
+                        <legend class="text-danger">All Fields Required</legend>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="first-name-input" placeholder="First Name">
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="last-name-input" placeholder="Last Name">
+                        </div>
+                    </form>
+                    <div class="text-danger" id="login-error-display"></div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="auth-submit-button">Submit</button>
