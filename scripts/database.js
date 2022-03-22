@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
-import { getFirestore, collection, getDocs, getDoc, query, where, limit } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 const firebaseConfig = {
     apiKey: "AIzaSyCQvqEt6hosrhuWSKsUojtsxo9LSXttn5s",
     authDomain: "hvbb-game-list.firebaseapp.com",
@@ -24,7 +24,6 @@ class User {
         this.color = color;
     }
 }
-
 // User Converter
 const userConverter = {
     toFirestore: (user) => {
@@ -38,7 +37,7 @@ const userConverter = {
     },
     fromFirestore: (snapshot, options) => {
         const data = snapshot.data(options);
-        return new User(data.name[first], data.name[last], data.color, data.gamesOwned);
+        return new User(data.name[first], data.name[last], data.color);
     }
 };
 // Game Class
@@ -64,6 +63,7 @@ const gameConverter = {
     }
 };
 
+/*
 async function getUsers(db) {
     let allGames = [];
     const userRef = collection(db, 'users');
@@ -87,12 +87,13 @@ async function retrieveUserGames(db, allUsers) {
     const data = await getDoc(firstUser.gamesOwned[0]);
     console.log(data.data());
 }
+*/
 
 export async function getGameOwners(ownerRefs) {
     let allOwners = [];
-    // console.log(ownerRefs);
     for (const ownerRef of ownerRefs) {
         const ownerData = await getDoc(ownerRef);
+        console.log(ownerData);
         allOwners.push(ownerData.data());
     }
     return allOwners;
@@ -121,4 +122,24 @@ export async function getThisGame(bggID) {
     const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
     const querySnap = await getDocs(q);
     return querySnap.docs[0].data();
+}
+
+export async function getThisUser(userUID) {
+    const userRef = doc(db, 'users', userUID);
+    const userSnap = await getDoc(userRef);
+    const thisUser = new User(userSnap.data().name['first'], userSnap.data().name['last'], userSnap.data().color);
+    return thisUser;
+}
+
+export async function getUserGames(userUID) {
+    let userGames = [];
+    const gameRef = collection(db, 'games').withConverter(gameConverter);
+    const docRef = doc(db, 'users', userUID);
+    const q = query(gameRef, where('owners', 'array-contains', docRef));
+    const querySnap = await getDocs(q);
+    for (const game of querySnap.docs) {
+        const thisGame = new Game(game.data().bggID, game.data().bggName);
+        userGames.push(thisGame);
+    }
+    return userGames;
 }

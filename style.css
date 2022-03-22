@@ -10,6 +10,10 @@ body {
     z-index: 0;
 }
 
+table {
+    border-radius: 5px;
+}
+
 h1, h2, h3, h4 {
     color: white;
 }
@@ -125,8 +129,9 @@ td.game-name, td.game-owners, span.game-owner {
     color: darkolivegreen;
 }
 
-/* Login styling */
-div#auth-modal {
-    /* z-index: 1; */
-    box-shadow: 0px 0px 10px 20px;
+/* User Profile Styling */
+form#update-user-info-form {
+    background-color: whitesmoke;
+    padding: 10px;
+    border-radius: 5px;
 }

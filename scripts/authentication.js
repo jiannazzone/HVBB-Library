@@ -20,33 +20,14 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 // Prepare Toast and Modal
-const authToast = document.getElementById('auth-toast');
-const authToastBS = new bootstrap.Toast(authToast);
-const authModal = document.getElementById('auth-modal');
-const authModalBS = new bootstrap.Modal(authModal);
-
-onAuthStateChanged(auth, (user) => {
-
-    if (user) {
-        // User is signed in, see docs for a list of available properties
-
-        // Edit the Profile Navbar
-        document.getElementById('login-button').style.display = 'none';
-        const signedInNavItems = document.getElementsByClassName('signed-in-only');
-        for (let i = 0; i < signedInNavItems.length; i++) {
-            signedInNavItems[i].style.display = 'inline';
-        }
-
-    } else {
-        // User is signed out
-        document.getElementById('logout-button').style.display = 'none';
-        document.getElementById('login-button').style.display = 'inline';
-        const signedInNavItems = document.getElementsByClassName('signed-in-only');
-        for (let i = 0; i < signedInNavItems.length; i++) {
-            signedInNavItems[i].style.display = 'none';
-        }
-    }
-});
+try {
+    const authToast = document.getElementById('auth-toast');
+    const authToastBS = new bootstrap.Toast(authToast);
+    const authModal = document.getElementById('auth-modal');
+    const authModalBS = new bootstrap.Modal(authModal);
+} catch(error) {
+    console.log(error)
+}
 
 // Listen for Login
 const submitButton = document.getElementById('auth-submit-button');
@@ -69,6 +50,30 @@ logoutButton.addEventListener('click', function () {
         console.log(error);
     });
 
+});
+
+onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+        // User is signed in, see docs for a list of available properties
+
+        // Edit the Profile Navbar
+        document.getElementById('login-button').style.display = 'none';
+        const signedInNavItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInNavItems.length; i++) {
+            signedInNavItems[i].style.display = 'inline';
+        }
+        document.getElementById('profile-link').href = `user-profile.html?id=${user.uid}`;
+
+    } else {
+        // User is signed out
+        document.getElementById('logout-button').style.display = 'none';
+        document.getElementById('login-button').style.display = 'inline';
+        const signedInNavItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInNavItems.length; i++) {
+            signedInNavItems[i].style.display = 'none';
+        }
+    }
 });
 
 function createUser() {
