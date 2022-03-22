@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
-import { getFirestore, collection, doc, setDoc} from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
+import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
@@ -19,31 +19,56 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
+// Prepare Toast and Modal
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
+
 onAuthStateChanged(auth, (user) => {
+
     if (user) {
         // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
+
+        // Edit the Profile Navbar
         document.getElementById('login-button').style.display = 'none';
-        
-        // if (document.getElementById('auth-submit-button').innerHTML == 'Finish') {
-        //     console.log(user);
-        //     setUserPrefs(user);
-        // }
+        const signedInNavItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInNavItems.length; i++) {
+            signedInNavItems[i].style.display = 'inline';
+        }
 
     } else {
         // User is signed out
+        document.getElementById('logout-button').style.display = 'none';
         document.getElementById('login-button').style.display = 'inline';
+        const signedInNavItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInNavItems.length; i++) {
+            signedInNavItems[i].style.display = 'none';
+        }
     }
 });
 
-// Listen for submission
+// Listen for Login
 const submitButton = document.getElementById('auth-submit-button');
 submitButton.addEventListener('click', function () {
     if (submitButton.innerHTML == 'Submit') {
-        createUser();
+        signIn();
     } else if (submitButton.innerHTML == 'Finish') {
         setUserPrefs(auth.currentUser);
     }
+});
+
+// Listen for Logout
+const logoutButton = document.getElementById('logout-button');
+logoutButton.addEventListener('click', function () {
+    signOut(auth).then(() => {
+        // Sign-out successful.
+        document.getElementById('auth-toast-body').innerHTML = 'Successfully Signed Out';
+        authToastBS.show();
+    }).catch((error) => {
+        console.log(error);
+    });
+
 });
 
 function createUser() {
@@ -55,6 +80,7 @@ function createUser() {
 
             // Signed in 
             const user = userCredential.user;
+            console.log('signed in');
 
             // Advance the modal
             const credentialsForm = document.getElementById('email-password-modal-form');
@@ -67,38 +93,66 @@ function createUser() {
         .catch((error) => {
             const errorCode = error.code;
             console.log(error.code);
-
-            // Present custom error message
-            let errorMessage;
-            if (errorCode == 'auth/invalid-email' || (!email.includes('@') && !email.includes('.'))) {
-                errorMessage = 'Please enter a valid email address.'
-            } else if (password = '') {
-                errorMessage = 'Please input a password.'
-            } else if (errorCode == 'auth/weak-password') {
-                errorMessage = 'You need a stronger password.'
-            } else {
-                errorMessage = 'An unknown error has occured. Please check your email and password.'
-            }
-            document.getElementById('login-error-display').innerHTML = errorMessage;
         });
+}
+
+function signIn() {
+    const email = document.getElementById('email-input').value;
+    const password = document.getElementById('password-input').value;
+
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            authModalBS.hide();
+
+            // Display toast message
+            document.getElementById('auth-toast-body').innerHTML = 'Successfully Signed In';
+            authToastBS.show();
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            console.log(error.code);
+            // Present custom error message
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    createUser();
+                    break;
+                case 'auth/invalid-email':
+                    document.getElementById('login-error-display').innerHTML = 'Please enter a valid email address.';
+                    break;
+                case 'auth/weak-password':
+                    document.getElementById('login-error-display').innerHTML = 'You need a stronger password.';
+                    break;
+                case 'auth/wrong-password':
+                    document.getElementById('login-error-display').innerHTML = 'Incorrect password. Please try again.';
+                    break;
+                default:
+                    document.getElementById('login-error-display').innerHTML = 'An unknown error has occured. Please try again.';
+                    break;
+            }
+        });
+
 }
 
 async function setUserPrefs(user) {
     // Create user in users collection with matching documentID
     console.log(user);
     const db = getFirestore(app);
-    const color = 'red';
+    const color = document.getElementById('color-input').value;
     const first = document.getElementById('first-name-input').value;
     const last = document.getElementById('last-name-input').value;
 
     await setDoc(doc(db, 'users', user.uid), {
         color: color,
-        name : {
+        name: {
             first: first,
             last: last
         }
     });
 
-    document.getElementById('auth-modal').hide();
-    
+    // Display toast message and hide modal
+    document.getElementById('auth-toast-body').innerHTML = 'Account Successfully Created';
+    authToastBS.show();
+    authModalBS.hide();
 }
