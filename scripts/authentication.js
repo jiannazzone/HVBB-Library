@@ -116,7 +116,6 @@ function signIn() {
             authToastBS.show();
         })
         .catch((error) => {
-            const errorCode = error.code;
             console.log(error.code);
             // Present custom error message
             switch (error.code) {

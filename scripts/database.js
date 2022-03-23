@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
-import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 const firebaseConfig = {
     apiKey: "AIzaSyCQvqEt6hosrhuWSKsUojtsxo9LSXttn5s",
     authDomain: "hvbb-game-list.firebaseapp.com",
@@ -93,7 +93,7 @@ export async function getGameOwners(ownerRefs) {
     let allOwners = [];
     for (const ownerRef of ownerRefs) {
         const ownerData = await getDoc(ownerRef);
-        console.log(ownerData);
+        // console.log(ownerData);
         allOwners.push(ownerData.data());
     }
     return allOwners;
@@ -142,4 +142,17 @@ export async function getUserGames(userUID) {
         userGames.push(thisGame);
     }
     return userGames;
+}
+
+export async function updateUser(uid, first, last, color) {
+    const userRef = doc(db, 'users', uid);
+    const docData = {
+        color: color,
+        name: {
+            first: first,
+            last: last
+        }
+    }
+    await setDoc(userRef, docData, { merge: true});
+    return true;
 }
