@@ -3,6 +3,7 @@
 /* General site stylings */
 body {
     background-color: darkolivegreen;
+    height: 100vh;
 }
 
 .navbar {
@@ -71,10 +72,6 @@ nav {
 
 /* Game Details */
 
-body {
-    height: 100vh;
-}
-
 #game-title, #game-designer {
     text-align: center;
     text-shadow: 0px 1px black;
@@ -97,10 +94,8 @@ img#game-image {
     width: 100%;
 }
 
-a#data-source {
-    padding: 10px;
-    box-shadow: 0px 2px black;
-    width: auto;
+#remove-game-button {
+    display: none;
 }
 
 /* Game List Styling */

@@ -1,7 +1,7 @@
 import { getAllGames } from "./database.js";
 
-// Fill in the table with all games in collection
-const allGames = await getAllGames();
+// Get all games in master library
+let allGames = await getAllGames();
 
 const tableBodyHTML = document.getElementById('game-collection');
 let tableHTML = '';

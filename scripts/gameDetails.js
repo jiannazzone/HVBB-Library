@@ -1,12 +1,23 @@
 // Load game details from Board Game Geek
 
-import { getThisGame, getGameOwners } from "./database.js";
+import { getThisGame, getGameOwners, addGame } from "./database.js";
+import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
+
+const auth = getAuth();
+let userUID;
+
+const params = new URLSearchParams(location.search);
+const gameID = params.get('id');
 
 makeAPIcall();
 
+// Listen for Add Game
+const addGameButton = document.getElementById('add-game-button');
+addGameButton.addEventListener('click', function () {
+    addGame(userUID, gameID);
+});
+
 function makeAPIcall() {
-    const params = new URLSearchParams(location.search);
-    const gameID = params.get('id');
 
     let thisUrl = `https://boardgamegeek.com/xmlapi2/thing?id=${gameID}&stats=1`;
     var xmlhttp = new XMLHttpRequest();
@@ -63,7 +74,7 @@ async function getGameDetails(xml) {
     const gameImage = document.getElementById('game-image');
     gameImage.src = x.getElementsByTagName('image')[0].innerHTML;
     gameImage.alt = `${gameTitle.innerHTML} Box Art`;
-    gameImage.onclick = function() {window.open(`https://boardgamegeek.com/boardgame/${x.id}`,'_blank')};
+    gameImage.onclick = function () { window.open(`https://boardgamegeek.com/boardgame/${x.id}`, '_blank') };
 
     // Player Count
     const playerCount = document.getElementById('player-count');
@@ -82,18 +93,37 @@ async function getGameDetails(xml) {
     playTime.innerHTML += playTimeText;
 
     // Owners
-    const params = new URLSearchParams(location.search);
-    const gameID = params.get('id');
+    try {
+        displayOwners();
+    } catch {
+        console.log('Game not in library.')
+    }
+}
 
+async function displayOwners() {
     // Get owners from Firestore
     const thisGame = await getThisGame(gameID);
     const gameOwners = await getGameOwners(thisGame.owners);
     // Create HTML elements
-
     const ownersDiv = document.getElementById('game-owners-card');
+    ownersDiv.innerHTML = '<h2>Owners</h2>';
     let ownersHTML = '';
     gameOwners.forEach((owner) => {
-        ownersHTML += `<span class="game-owner" style="background-color:${owner.color}; border:1px solid darkolivegreen;">${owner.name['first']} ${owner.name['last'].slice(0,1)}</span>`
+        ownersHTML += `<span class="game-owner" style="background-color:${owner.color}; border:1px solid darkolivegreen;">${owner.name['first']} ${owner.name['last'].slice(0, 1)}</span>`
     });
     ownersDiv.innerHTML += ownersHTML;
 }
+
+onAuthStateChanged(auth, (user) => {
+
+    if (user) {
+        // User is signed in
+        userUID = user.uid;
+
+        // Check to see if the user owns this game
+        // If so, remove the "Add Game" button and show "Delete Game" button
+
+    } else {
+        // User is signed out
+    }
+});

@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
-import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit, setDoc, updateDoc, arrayUnion, addDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 const firebaseConfig = {
     apiKey: "AIzaSyCQvqEt6hosrhuWSKsUojtsxo9LSXttn5s",
     authDomain: "hvbb-game-list.firebaseapp.com",
@@ -96,6 +96,19 @@ export async function getGameOwners(ownerRefs) {
         // console.log(ownerData);
         allOwners.push(ownerData.data());
     }
+
+    // Sort game owners
+    // Sort the games by name
+    allOwners.sort((a, b) => {
+        let fa = a.name['first'].toLowerCase();
+        let fb = b.name['first'].toLowerCase();
+        if (fa < fb) {
+            return -1;
+        } else {
+            return 1;
+        }
+        return 0;
+    });
     return allOwners;
 }
 
@@ -114,6 +127,17 @@ export async function getAllGames() {
             console.log('No document found.');
         }
     }
+    // Sort the games by name
+    allGames.sort((a, b) => {
+        let fa = a.bggName.toLowerCase();
+        let fb = b.bggName.toLowerCase();
+        if (fa < fb) {
+            return -1;
+        } else {
+            return 1;
+        }
+        return 0;
+    });
     return allGames;
 }
 
@@ -155,4 +179,32 @@ export async function updateUser(uid, first, last, color) {
     }
     await setDoc(userRef, docData, { merge: true});
     return true;
+}
+
+export async function addGame(uid, bggID) {
+    // Check if game exists in master library
+    const gameRef = collection(db, 'games').withConverter(gameConverter);
+    const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
+    const querySnap = await getDocs(q);
+
+    const userRef = doc(db, 'users', uid);
+    
+    if (querySnap.docs.length > 0) {
+        // Game already in master library
+        const thisGameRef = doc(db, 'games', querySnap.docs[0].id);
+        await updateDoc(thisGameRef, {
+            owners: arrayUnion(userRef)
+        });
+        console.log('user added to game')
+    } else {
+        // Game not in master library yet. Need to create the game first
+        const gameData = {
+            bggID: Number(bggID),
+            bggName: document.getElementById('game-title').innerHTML,
+            owners: [userRef]
+        };
+        await addDoc(collection(db, 'games'), gameData);
+        console.log('game added')
+        location.reload();
+    }
 }
