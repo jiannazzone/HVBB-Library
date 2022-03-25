@@ -25,7 +25,7 @@ try {
     const authToastBS = new bootstrap.Toast(authToast);
     const authModal = document.getElementById('auth-modal');
     const authModalBS = new bootstrap.Modal(authModal);
-} catch(error) {
+} catch (error) {
     console.log(error)
 }
 
@@ -35,7 +35,7 @@ submitButton.addEventListener('click', function () {
     if (submitButton.innerHTML == 'Submit') {
         signIn();
     } else if (submitButton.innerHTML == 'Finish') {
-        setUserPrefs(auth.currentUser);
+        createUser();
     }
 });
 
@@ -86,13 +86,7 @@ function createUser() {
             // Signed in 
             const user = userCredential.user;
             console.log('signed in');
-
-            // Advance the modal
-            const credentialsForm = document.getElementById('email-password-modal-form');
-            const userPreferencesForm = document.getElementById('display-name-color-modal-form');
-            const submitButton = document.getElementById('auth-submit-button').innerHTML = 'Finish';
-            credentialsForm.style.display = 'none';
-            userPreferencesForm.style.display = 'block';
+            setUserPrefs(auth.currentUser);
 
         })
         .catch((error) => {
@@ -120,7 +114,14 @@ function signIn() {
             // Present custom error message
             switch (error.code) {
                 case 'auth/user-not-found':
-                    createUser();
+                    // Create new account
+
+                    // Advance the modal
+                    const credentialsForm = document.getElementById('email-password-modal-form');
+                    const userPreferencesForm = document.getElementById('display-name-color-modal-form');
+                    const submitButton = document.getElementById('auth-submit-button').innerHTML = 'Finish';
+                    credentialsForm.style.display = 'none';
+                    userPreferencesForm.style.display = 'block';
                     break;
                 case 'auth/invalid-email':
                     document.getElementById('login-error-display').innerHTML = 'Please enter a valid email address.';
