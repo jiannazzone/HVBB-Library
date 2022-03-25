@@ -11,6 +11,9 @@ console.log(`User: ${userUID}`);
 document.getElementById('name-title').innerHTML = `${thisUser.first} ${thisUser.last}`;
 document.title = `Profile: ${thisUser.first} ${thisUser.last}`;
 
+// Add UID to Bulk-Add href
+document.getElementById('bulk-add-button').href = `bulk-add.html?id=${userUID}`;
+
 // Get Users Games and populate table
 const thisUserGames = await getUserGames(userUID);
 const gameTable = document.getElementById('game-collection');

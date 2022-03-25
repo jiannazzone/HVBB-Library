@@ -15,7 +15,7 @@ table {
     border-radius: 5px;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, ul {
     color: white;
 }
 
@@ -125,7 +125,7 @@ td.game-name, span.game-owner {
 }
 
 /* User Profile Styling */
-form#update-user-info-form {
+form#update-user-info-form, form#bulk-add-form {
     background-color: whitesmoke;
     padding: 10px;
     border-radius: 5px;
@@ -133,4 +133,8 @@ form#update-user-info-form {
 
 td.game-name {
     justify-content: space-between;
+}
+
+.form-control-color {
+    width: 100%;
 }
