@@ -5,14 +5,13 @@ const params = new URLSearchParams(location.search);
 const userUID = params.get('id');
 const thisUser = await getThisUser(userUID);
 const auth = getAuth();
-console.log(`User: ${userUID}`);
 
 // Set Page Title
 document.getElementById('name-title').innerHTML = `${thisUser.first} ${thisUser.last}`;
 document.title = `Profile: ${thisUser.first} ${thisUser.last}`;
 
 // Add UID to Bulk-Add href
-document.getElementById('bulk-add-button').href = `bulk-add.html?id=${userUID}`;
+document.getElementById('bulk-add-button').href = `bulk-add.html`;
 
 // Get Users Games and populate table
 const thisUserGames = await getUserGames(userUID);
@@ -72,7 +71,7 @@ updateInfoSubmitButton.addEventListener('click', function () {
     }
 
     // Call function from database.js
-    const updateComplete = updateUser(userUID, newFirst, newLast, newColor);
+    updateUser(userUID, newFirst, newLast, newColor);
 
     // Display toast message
     const authToast = document.getElementById('auth-toast');

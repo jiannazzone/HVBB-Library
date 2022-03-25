@@ -138,3 +138,7 @@ td.game-name {
 .form-control-color {
     width: 100%;
 }
+
+div#bulk-results {
+    display: none;
+}

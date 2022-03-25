@@ -10,7 +10,7 @@ if (val == '') {
     return;
 }
 
-    let thisUrl = "https://boardgamegeek.com/xmlapi2/search?type=boardgame,boardgameexpansion&query=" + val.replace(' ', '+'); // Spaces are replaced with a + per API instructions
+    let thisUrl = "https://boardgamegeek.com/xmlapi2/search?type=boardgame,boardgameexpansion&query=" + val.replace(/\s/g, "+"); // Spaces are replaced with a + per API instructions
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {

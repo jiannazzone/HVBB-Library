@@ -122,7 +122,7 @@ export async function getAllGames() {
             const thisGame = new Game(game.data().bggID, game.data().bggName);
             thisGame.owners = await getGameOwners(game.data().owners)
             allGames.push(thisGame);
-        } else if( game.data().owners.length == 0) {
+        } else if (game.data().owners.length == 0) {
             console.log(`${game.data().bggName} has no owners. Deleting from library...`)
             await deleteDoc(doc(db, 'games', game.id));
         } else {
@@ -191,7 +191,7 @@ export async function updateUser(uid, first, last, color) {
             last: last
         }
     }
-    await setDoc(userRef, docData, { merge: true});
+    await setDoc(userRef, docData, { merge: true });
     return true;
 }
 
@@ -201,7 +201,7 @@ export async function addGame(uid, bggID) {
     const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
     const querySnap = await getDocs(q);
     const userRef = doc(db, 'users', uid);
-    
+
     if (querySnap.docs.length > 0) {
         // Game already in master library
         const thisGameRef = doc(db, 'games', querySnap.docs[0].id);
