@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js";
-import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit, setDoc, updateDoc, arrayUnion, addDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
+import { getFirestore, collection, getDocs, getDoc, doc, query, where, limit, setDoc, updateDoc, arrayUnion, arrayRemove, addDoc, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 const firebaseConfig = {
     apiKey: "AIzaSyCQvqEt6hosrhuWSKsUojtsxo9LSXttn5s",
     authDomain: "hvbb-game-list.firebaseapp.com",
@@ -118,10 +118,13 @@ export async function getAllGames() {
     const gameSnap = await getDocs(gameRef);
 
     for (const game of gameSnap.docs) {
-        if (game.exists()) {
+        if (game.exists() && game.data().owners.length > 0) {
             const thisGame = new Game(game.data().bggID, game.data().bggName);
             thisGame.owners = await getGameOwners(game.data().owners)
             allGames.push(thisGame);
+        } else if( game.data().owners.length == 0) {
+            console.log(`${game.data().bggName} has no owners. Deleting from library...`)
+            await deleteDoc(doc(db, 'games', game.id));
         } else {
             console.log('No document found.');
         }
@@ -197,7 +200,6 @@ export async function addGame(uid, bggID) {
     const gameRef = collection(db, 'games').withConverter(gameConverter);
     const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
     const querySnap = await getDocs(q);
-
     const userRef = doc(db, 'users', uid);
     
     if (querySnap.docs.length > 0) {
@@ -217,5 +219,26 @@ export async function addGame(uid, bggID) {
         await addDoc(collection(db, 'games'), gameData);
         console.log('game added')
         location.reload();
+    }
+}
+
+export async function deleteGame(uid, bggID) {
+    const gameRef = collection(db, 'games');
+    const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
+    const querySnap = await getDocs(q);
+    const userRef = doc(db, 'users', uid);
+
+    if (querySnap.docs.length == 1) {
+        const thisGameRef = doc(db, 'games', querySnap.docs[0].id);
+        await updateDoc(thisGameRef, {
+            owners: arrayRemove(userRef)
+        });
+        console.log(`Deleting ${uid} from ${querySnap.docs[0].data().bggName}`);
+    }
+
+    // If there are no more owners, delete the game document
+    if (querySnap.docs[0].data().owners.length == 0) {
+        console.log('No more owners; removing game from master library.')
+        await deleteDoc(querySnap.docs[0].docRef);
     }
 }

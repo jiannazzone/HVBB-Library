@@ -1,10 +1,11 @@
-import { getThisUser, getUserGames, updateUser } from "./database.js";
-import { getAuth, onAuthStateChanged, updateEmail, reauthenticateWithCredential } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
+import { getThisUser, getUserGames, updateUser, deleteGame } from "./database.js";
+import { getAuth, onAuthStateChanged, updateEmail } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
 
 const params = new URLSearchParams(location.search);
 const userUID = params.get('id');
 const thisUser = await getThisUser(userUID);
 const auth = getAuth();
+console.log(`User: ${userUID}`);
 
 // Set Page Title
 document.getElementById('name-title').innerHTML = `${thisUser.first} ${thisUser.last}`;
@@ -16,9 +17,16 @@ const gameTable = document.getElementById('game-collection');
 
 let tableHTML = '';
 thisUserGames.forEach((game) => {
-    tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td></tr>`;
+    tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td><button class="btn btn-sm btn-danger" type="button" id="${game.bggID}-delete"><i class="bi bi-trash-fill"></i></button></td></tr>`;
 });
 gameTable.innerHTML = tableHTML;
+
+// Create event listeners to delete games
+thisUserGames.forEach((game) => {
+    document.getElementById(`${game.bggID}-delete`).addEventListener('click', function () {
+        deleteGame(userUID, game.bggID);
+    }, false);
+});
 
 // Let user update their info
 const updateInfoSubmitButton = document.getElementById('update-submit-button');
@@ -69,7 +77,6 @@ updateInfoSubmitButton.addEventListener('click', function () {
     document.getElementById('auth-toast-body').innerHTML = 'Profile Updated';
     authToastBS.show();
 });
-
 
 onAuthStateChanged(auth, (user) => {
 
