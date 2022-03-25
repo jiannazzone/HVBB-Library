@@ -142,3 +142,8 @@ td.game-name {
 div#bulk-results {
     display: none;
 }
+
+td>div.form-check {
+    text-align: center;
+    justify-content: center;
+}

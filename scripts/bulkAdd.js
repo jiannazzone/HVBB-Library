@@ -1,4 +1,4 @@
-import { getThisUser, getUserGames, updateUser, deleteGame } from './database.js';
+import { getThisUser, getUserGames, updateUser, deleteGame, addGame } from './database.js';
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
 
 const auth = getAuth();
@@ -11,6 +11,20 @@ document.getElementById('bulk-submit-button').addEventListener('click', function
         const gameMatches = bulkAddGames(inputValue);
         // console.log(gameMatches);
     }
+}, false);
+
+// Listen for accept
+document.getElementById('add-selected-button').addEventListener('click', async function () {
+    // Determine which games are selected
+    const allCheckboxes = document.getElementsByClassName('game-checkbox');
+    console.log(allCheckboxes);
+    for (let i = 0; i < allCheckboxes.length; i++) {
+        if (allCheckboxes[i].checked) {
+            const idAndName = allCheckboxes[i].id.split('_')
+            await addGame(userUID, Number(idAndName[0]), idAndName[1]);
+        }
+    }
+    window.open(`user-profile.html?id=${userUID}`);
 }, false);
 
 function bulkAddGames(textInput) {
@@ -66,13 +80,21 @@ function bulkAddGames(textInput) {
     document.getElementById('bulk-results').style.display = 'inline';
     const resultsTable = document.getElementById('results-table-body');
 
-    console.log(gameMatches);
-    console.log(`New Games Length: ${newGames.length}`);
-    console.log(`Game Matches Length: ${gameMatches.length}`);
+    // console.log(gameMatches);
+    // console.log(`New Games Length: ${newGames.length}`);
+    // console.log(`Game Matches Length: ${gameMatches.length}`);
 
     let tableHTML = '';
     for (let i = 0; i < gameMatches.length; i++) {
-        tableHTML += `<tr class="game-row gy-5" id="${i}"><td>✅</td><td class="game-name w-auto">${newGames[i]}</td>`;
+
+        // Create table row
+        tableHTML += `<tr class="gy-5"><td><div class="form-check d-flex"><input class="form-check-input game-checkbox" type="checkbox" value="" id="${gameMatches[i].bggID}_${gameMatches[i].bggName}"`
+        
+        if (gameMatches[i].bggID != 0) {
+            tableHTML += 'checked';
+        
+        }
+        tableHTML += `></div></td><td class="game-name w-auto">${newGames[i]}</td>`;
 
         if (gameMatches[i].bggID == 0) {
             tableHTML += '<td class="text-danger">Game Not Found</td></tr>';

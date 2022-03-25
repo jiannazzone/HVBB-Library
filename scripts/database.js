@@ -195,7 +195,7 @@ export async function updateUser(uid, first, last, color) {
     return true;
 }
 
-export async function addGame(uid, bggID) {
+export async function addGame(uid, bggID, bggName) {
     // Check if game exists in master library
     const gameRef = collection(db, 'games').withConverter(gameConverter);
     const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
@@ -213,7 +213,7 @@ export async function addGame(uid, bggID) {
         // Game not in master library yet. Need to create the game first
         const gameData = {
             bggID: Number(bggID),
-            bggName: document.getElementById('game-title').innerHTML,
+            bggName: bggName,
             owners: [userRef]
         };
         await addDoc(collection(db, 'games'), gameData);

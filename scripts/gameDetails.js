@@ -14,8 +14,8 @@ makeAPIcall();
 // Listen for Add Game
 const addGameButton = document.getElementById('add-game-button');
 addGameButton.addEventListener('click', function () {
-    addGame(userUID, gameID);
-});
+    addGame(userUID, gameID, document.getElementById('game-title').innerHTML);
+}, false);
 
 function makeAPIcall() {
 
