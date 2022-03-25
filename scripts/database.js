@@ -107,7 +107,6 @@ export async function getGameOwners(ownerRefs) {
         } else {
             return 1;
         }
-        return 0;
     });
     return allOwners;
 }
@@ -136,7 +135,6 @@ export async function getAllGames() {
         } else {
             return 1;
         }
-        return 0;
     });
     return allGames;
 }
@@ -145,7 +143,11 @@ export async function getThisGame(bggID) {
     const gameRef = collection(db, 'games').withConverter(gameConverter);
     const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
     const querySnap = await getDocs(q);
-    return querySnap.docs[0].data();
+    if (querySnap.docs != []) {
+        return querySnap.docs[0].data();
+    } else {
+        return null;
+    }
 }
 
 export async function getThisUser(userUID) {
@@ -165,6 +167,15 @@ export async function getUserGames(userUID) {
         const thisGame = new Game(game.data().bggID, game.data().bggName);
         userGames.push(thisGame);
     }
+    userGames.sort((a, b) => {
+        let fa = a.bggName.toLowerCase();
+        let fb = b.bggName.toLowerCase();
+        if (fa < fb) {
+            return -1;
+        } else {
+            return 1;
+        }
+    });
     return userGames;
 }
 

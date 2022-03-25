@@ -107,7 +107,7 @@ span.game-owner {
     border: 1px solid black;
 }
 
-td.game-name, td.game-owners, span.game-owner {
+td.game-name, span.game-owner {
     cursor: pointer;
     min-width: none;
     vertical-align: middle;

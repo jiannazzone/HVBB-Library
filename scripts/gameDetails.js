@@ -103,15 +103,17 @@ async function getGameDetails(xml) {
 async function displayOwners() {
     // Get owners from Firestore
     const thisGame = await getThisGame(gameID);
-    const gameOwners = await getGameOwners(thisGame.owners);
-    // Create HTML elements
-    const ownersDiv = document.getElementById('game-owners-card');
-    ownersDiv.innerHTML = '<h2>Owners</h2>';
-    let ownersHTML = '';
-    gameOwners.forEach((owner) => {
-        ownersHTML += `<span class="game-owner" style="background-color:${owner.color}; border:1px solid darkolivegreen;">${owner.name['first']} ${owner.name['last'].slice(0, 1)}</span>`
-    });
-    ownersDiv.innerHTML += ownersHTML;
+    if (thisGame.owners.length > 0) {
+        const gameOwners = await getGameOwners(thisGame.owners);
+        // Create HTML elements
+        const ownersDiv = document.getElementById('game-owners-card');
+        ownersDiv.innerHTML = '<h2>Owners</h2>';
+        let ownersHTML = '';
+        gameOwners.forEach((owner) => {
+            ownersHTML += `<span class="game-owner" style="background-color:${owner.color}; border:1px solid darkolivegreen;">${owner.name['first']} ${owner.name['last'].slice(0, 1)}</span>`
+        });
+        ownersDiv.innerHTML += ownersHTML;
+    }
 }
 
 onAuthStateChanged(auth, (user) => {

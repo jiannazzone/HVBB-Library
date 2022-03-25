@@ -1,5 +1,5 @@
 import { getThisUser, getUserGames, updateUser } from "./database.js";
-import { getAuth, onAuthStateChanged, updateEmail } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
+import { getAuth, onAuthStateChanged, updateEmail, reauthenticateWithCredential } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
 
 const params = new URLSearchParams(location.search);
 const userUID = params.get('id');
@@ -8,6 +8,7 @@ const auth = getAuth();
 
 // Set Page Title
 document.getElementById('name-title').innerHTML = `${thisUser.first} ${thisUser.last}`;
+document.title = `Profile: ${thisUser.first} ${thisUser.last}`;
 
 // Get Users Games and populate table
 const thisUserGames = await getUserGames(userUID);
@@ -39,20 +40,28 @@ updateInfoSubmitButton.addEventListener('click', function () {
     }
     if (newEmail == '') {
         newEmail = document.getElementById('email-update').placeholder;
+    } else {
+        // Update email address
+        updateEmail(auth.currentUser, newEmail).then(() => {
+            // Email updated!
+            console.log('Email updated')
+        }).catch((error) => {
+            if (error.code == 'auth/requires-recent-login') {
+                document.getElementById('auth-toast-body').innerHTML = 'You need to log in again to do that.';
+                const authModal = document.getElementById('auth-modal');
+                document.getElementById('email-input').value = auth.currentUser.email;
+                const authModalBS = new bootstrap.Modal(authModal);
+                authModalBS.show();
+            } else {
+                document.getElementById('auth-toast-body').innerHTML = 'An error has occured';
+            }
+            console.log(error.code);
+            authToastBS.show();
+        });
     }
 
     // Call function from database.js
     const updateComplete = updateUser(userUID, newFirst, newLast, newColor);
-
-    // Update email address
-    updateEmail(auth.currentUser, newEmail).then(() => {
-        // Email updated!
-        console.log('Email updated')
-    }).catch((error) => {
-        console.log(error.code);
-        document.getElementById('auth-toast-body').innerHTML = 'An error has occured';
-        authToastBS.show();
-    });
 
     // Display toast message
     const authToast = document.getElementById('auth-toast');
