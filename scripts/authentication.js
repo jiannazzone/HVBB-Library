@@ -20,14 +20,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 
 // Prepare Toast and Modal
-try {
-    const authToast = document.getElementById('auth-toast');
-    const authToastBS = new bootstrap.Toast(authToast);
-    const authModal = document.getElementById('auth-modal');
-    const authModalBS = new bootstrap.Modal(authModal);
-} catch (error) {
-    console.log(error)
-}
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
+
 
 // Listen for Login
 const submitButton = document.getElementById('auth-submit-button');
