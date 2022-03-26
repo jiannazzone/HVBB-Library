@@ -13,7 +13,12 @@ allGames.forEach((game) => {
     // Add owners to right column. Each owner in a span with appropriate coloring
     let ownersHTML = '';
     game.owners.forEach((owner) => {
-        ownersHTML += `<div class="col-sm"><span class="game-owner" style="background-color: ${owner.color};">${owner.name['first']} ${owner.name['last'].slice(0,1)}</span></div>`
+        ownersHTML +=
+            `<div class="col-sm">
+                <span class="game-owner" style="background-color: ${owner.data().color};" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">
+                ${owner.data().name['first']} ${owner.data().name['last'].slice(0,1)}
+                </span>
+            </div>`;
     });
     tableHTML += `${ownersHTML}</div></td></tr>`;
 });

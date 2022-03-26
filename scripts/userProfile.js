@@ -19,7 +19,7 @@ const gameTable = document.getElementById('game-collection');
 
 let tableHTML = '';
 thisUserGames.forEach((game) => {
-    tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td><button class="btn btn-sm btn-danger" type="button" id="${game.bggID}-delete"><i class="bi bi-trash-fill"></i></button></td></tr>`;
+    tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td><button class="btn btn-sm btn-danger signed-in-only" type="button" id="${game.bggID}-delete"><i class="bi bi-trash-fill"></i></button></td></tr>`;
 });
 gameTable.innerHTML = tableHTML;
 

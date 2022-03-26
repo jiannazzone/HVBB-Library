@@ -110,7 +110,7 @@ async function displayOwners() {
         ownersDiv.innerHTML = '<h2>Owners</h2>';
         let ownersHTML = '';
         gameOwners.forEach((owner) => {
-            ownersHTML += `<span class="game-owner" style="background-color:${owner.color}; border:1px solid darkolivegreen;">${owner.name['first']} ${owner.name['last'].slice(0, 1)}</span>`
+            ownersHTML += `<span class="game-owner" style="background-color:${owner.data().color}; border:1px solid darkolivegreen;" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">${owner.data().name['first']} ${owner.data().name['last'].slice(0, 1)}</span>`
         });
         ownersDiv.innerHTML += ownersHTML;
     }

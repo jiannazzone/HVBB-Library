@@ -94,7 +94,7 @@ export async function getGameOwners(ownerRefs) {
     for (const ownerRef of ownerRefs) {
         const ownerData = await getDoc(ownerRef);
         // console.log(ownerData);
-        allOwners.push(ownerData.data());
+        allOwners.push(ownerData);
     }
 
     // Sort game owners
