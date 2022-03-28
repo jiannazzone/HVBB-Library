@@ -97,11 +97,10 @@ export async function getGameOwners(ownerRefs) {
         allOwners.push(ownerData);
     }
 
-    // Sort game owners
     // Sort the games by name
     allOwners.sort((a, b) => {
-        let fa = a.name['first'].toLowerCase();
-        let fb = b.name['first'].toLowerCase();
+        let fa = a.data().name['first'].toLowerCase();
+        let fb = b.data().name['first'].toLowerCase();
         if (fa < fb) {
             return -1;
         } else {
@@ -147,7 +146,7 @@ export async function getThisGame(bggID) {
     const q = query(gameRef, where('bggID', '==', Number(bggID)), limit(1));
     const querySnap = await getDocs(q);
     if (querySnap.docs != []) {
-        return querySnap.docs[0].data();
+        return querySnap.docs[0];
     } else {
         return null;
     }

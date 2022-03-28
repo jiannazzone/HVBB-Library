@@ -25,7 +25,6 @@ const authToastBS = new bootstrap.Toast(authToast);
 const authModal = document.getElementById('auth-modal');
 const authModalBS = new bootstrap.Modal(authModal);
 
-
 // Listen for Login
 const submitButton = document.getElementById('auth-submit-button');
 submitButton.addEventListener('click', function () {
@@ -56,19 +55,19 @@ onAuthStateChanged(auth, (user) => {
 
         // Edit the Profile Navbar
         document.getElementById('login-button').style.display = 'none';
-        const signedInNavItems = document.getElementsByClassName('signed-in-only');
-        for (let i = 0; i < signedInNavItems.length; i++) {
-            signedInNavItems[i].style.display = 'inline';
+        const signedInItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInItems.length; i++) {
+            signedInItems[i].style.display = 'inline';
         }
         document.getElementById('profile-link').href = `user-profile.html?id=${user.uid}`;
+        authModalBS.hide();
 
     } else {
         // User is signed out
         document.getElementById('logout-button').style.display = 'none';
-        document.getElementById('login-button').style.display = 'inline';
-        const signedInNavItems = document.getElementsByClassName('signed-in-only');
-        for (let i = 0; i < signedInNavItems.length; i++) {
-            signedInNavItems[i].style.display = 'none';
+        const signedInItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInItems.length; i++) {
+            signedInItems[i].style.display = 'none';
         }
     }
 });
@@ -139,7 +138,7 @@ function signIn() {
 
 async function setUserPrefs(user) {
     // Create user in users collection with matching documentID
-    console.log(user);
+    // console.log(user);
     const db = getFirestore(app);
     const color = document.getElementById('color-input').value;
     const first = document.getElementById('first-name-input').value;

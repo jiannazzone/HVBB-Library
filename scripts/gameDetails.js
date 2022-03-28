@@ -9,12 +9,19 @@ let userUID;
 const params = new URLSearchParams(location.search);
 const gameID = params.get('id');
 
+// Prepare Toast and Modal
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
+
 makeAPIcall();
 
 // Listen for Add Game
 const addGameButton = document.getElementById('add-game-button');
 addGameButton.addEventListener('click', function () {
     addGame(userUID, gameID, document.getElementById('game-title').innerHTML);
+    location.reload();
 }, false);
 
 function makeAPIcall() {
@@ -103,10 +110,10 @@ async function getGameDetails(xml) {
 async function displayOwners() {
     // Get owners from Firestore
     const thisGame = await getThisGame(gameID);
-    if (thisGame.owners.length > 0) {
-        const gameOwners = await getGameOwners(thisGame.owners);
+    const ownersDiv = document.getElementById('game-owners-card');
+    if (thisGame != null) {
+        const gameOwners = await getGameOwners(thisGame.data().owners);
         // Create HTML elements
-        const ownersDiv = document.getElementById('game-owners-card');
         ownersDiv.innerHTML = '<h2>Owners</h2>';
         let ownersHTML = '';
         gameOwners.forEach((owner) => {
@@ -115,6 +122,8 @@ async function displayOwners() {
             ownersHTML += `<span class="game-owner" style="background-color: ${ownerColor};color:${ownerTextColor};" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">${owner.data().name['first']} ${owner.data().name['last'].slice(0, 1)}</span>`
         });
         ownersDiv.innerHTML += ownersHTML;
+    } else {
+        ownersDiv.innerHTML = '<h2 style="color:darkolivegreen;">Owners</h2><h4 style="color:darkolivegreen;">Nobody owns this one!</h4>'
     }
 }
 

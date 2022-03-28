@@ -1,7 +1,12 @@
-// var activeGame = "";
 var gameList = {};
 var thisUserGames = [];
 var firstSearch = true;
+
+// Prepare Toast and Modal
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
 
 function makeAPIcall(val) {
 

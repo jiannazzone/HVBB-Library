@@ -1,27 +1,35 @@
 import { getThisUser, getUserGames, updateUser, deleteGame } from "./database.js";
-import { getAuth, onAuthStateChanged, updateEmail } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
+import { getAuth, onAuthStateChanged, updateEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
 
 const params = new URLSearchParams(location.search);
 const userUID = params.get('id');
 const thisUser = await getThisUser(userUID);
 const auth = getAuth();
+let deleteAccountConfirm = false;
 
 // Set Page Title
 document.getElementById('name-title').innerHTML = `${thisUser.first} ${thisUser.last}`;
 document.title = `Profile: ${thisUser.first} ${thisUser.last}`;
 
-// Add UID to Bulk-Add href
-document.getElementById('bulk-add-button').href = `bulk-add.html`;
+// Prepare Toast and Modal
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
 
 // Get Users Games and populate table
 const thisUserGames = await getUserGames(userUID);
 const gameTable = document.getElementById('game-collection');
 
-let tableHTML = '';
-thisUserGames.forEach((game) => {
-    tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td><button class="btn btn-sm btn-danger signed-in-only" type="button" id="${game.bggID}-delete"><i class="bi bi-trash-fill"></i></button></td></tr>`;
-});
-gameTable.innerHTML = tableHTML;
+if (thisUserGames.length > 0) {
+    let tableHTML = '';
+    thisUserGames.forEach((game) => {
+        tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td><button class="btn btn-sm btn-danger signed-in-only" type="button" id="${game.bggID}-delete"><i class="bi bi-trash-fill"></i></button></td></tr>`;
+    });
+    gameTable.innerHTML = tableHTML;
+} else {
+    gameTable.innerHTML = '<tr><td colspan="2">No games in collection</td></tr>';
+}
 
 // Create event listeners to delete games
 thisUserGames.forEach((game) => {
@@ -101,3 +109,47 @@ onAuthStateChanged(auth, (user) => {
         document.getElementById('update-user-info-col').style.display = 'none';
     }
 });
+
+// Account Deletion
+document.getElementById('delete-account-button').addEventListener('click', function () {
+    deleteAccount();
+}, false);
+
+async function deleteAccount() {
+    if (deleteAccountConfirm) {
+        // Loop through games and delete their userRef from each one
+        thisUserGames.forEach((game) => {
+            deleteGame(userUID, game.bggID);
+        });
+
+        // Delete their account
+        deleteUser(auth.currentUser).then(() => {
+            // User deleted.
+            document.getElementById('auth-toast-body').innerHTML = 'Account deleted.';
+            authToastBS.show();
+
+            setTimeout(function () {
+                location.href = 'index.html';
+            }, 2000);
+
+            document.getElementById('delete-account-button').innerHTML = 'Delete Account';
+            deleteAccountConfirm = false;
+
+        }).catch((error) => {
+
+            if (error.code == 'auth/requires-recent-login') {
+                document.getElementById('auth-toast-body').innerHTML = 'You need to log in again to do that.';
+                authModalBS.show();
+            }
+            document.getElementById('auth-toast-body').innerHTML = 'An error occured. Could not process deletion.';
+            authToastBS.show();
+            console.log(error.code);
+        });
+
+
+    } else {
+        // Update UI and ask for confirmation
+        document.getElementById('delete-account-button').innerHTML = 'Select Again to Confirm';
+        deleteAccountConfirm = true;
+    }
+}

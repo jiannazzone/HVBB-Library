@@ -1,5 +1,11 @@
 import { getAllGames, hex2hsl } from "./database.js";
 
+// Prepare Toast and Modal
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
+
 // Get all games in master library
 let allGames = await getAllGames();
 

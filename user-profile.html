@@ -48,7 +48,7 @@
                                     data-bs-target="#auth-modal">Login</div>
                             </li>
                             <li class="signed-in-only">
-                                <div class="dropdown-item text-danger" id="logout-button">Logout</div>
+                                <div class="dropdown-item text-danger signed-in-only" id="logout-button">Logout</div>
                             </li>
                         </ul>
                     </li>
@@ -75,7 +75,11 @@
                             <th colspan="2" scope="col">Games</th>
                         </tr>
                     </thead>
-                    <tbody id="game-collection"></tbody>
+                    <tbody id="game-collection">
+                        <tr>
+                            <td colspan="2">Loading...</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
 
@@ -105,7 +109,10 @@
                     </div>
                 </form>
                 <div class="mt-3 d-flex justify-content-center">
-                    <a type="button" class="btn btn-light" id="bulk-add-button" href="">Add Games In Bulk</a>
+                    <a type="button" class="btn btn-light" id="bulk-add-button" href="bulk-add.html">Add Games In Bulk</a>
+                </div>
+                <div class="mt-3 d-flex justify-content-center">
+                <button type="button" class="btn btn-danger" id="delete-account-button">Delete My Account</button>
                 </div>
             </div>
         </div>

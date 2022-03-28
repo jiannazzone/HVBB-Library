@@ -4,6 +4,12 @@ import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/
 const auth = getAuth();
 let userUID;
 
+// Prepare Toast and Modal
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
+
 // Listen for submit
 document.getElementById('bulk-submit-button').addEventListener('click', function () {
     let inputValue = document.getElementById('bulk-game-input').value;
@@ -24,7 +30,7 @@ document.getElementById('add-selected-button').addEventListener('click', async f
             await addGame(userUID, Number(idAndName[0]), idAndName[1]);
         }
     }
-    window.open(`user-profile.html?id=${userUID}`);
+    location.href = `user-profile.html?id=${userUID}`;
 }, false);
 
 function bulkAddGames(textInput) {
