@@ -21,7 +21,6 @@ makeAPIcall();
 const addGameButton = document.getElementById('add-game-button');
 addGameButton.addEventListener('click', function () {
     addGame(userUID, gameID, document.getElementById('game-title').innerHTML);
-    location.reload();
 }, false);
 
 function makeAPIcall() {

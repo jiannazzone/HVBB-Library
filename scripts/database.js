@@ -16,6 +16,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// Prepare Toast and Modal
+const authToast = document.getElementById('auth-toast');
+const authToastBS = new bootstrap.Toast(authToast);
+const authModal = document.getElementById('auth-modal');
+const authModalBS = new bootstrap.Modal(authModal);
+
 // User Class
 class User {
     constructor(first, last, color) {
@@ -207,7 +213,7 @@ export async function addGame(uid, bggID, bggName) {
         await updateDoc(thisGameRef, {
             owners: arrayUnion(userRef)
         });
-        console.log('user added to game')
+        
     } else {
         // Game not in master library yet. Need to create the game first
         const gameData = {
@@ -216,9 +222,12 @@ export async function addGame(uid, bggID, bggName) {
             owners: [userRef]
         };
         await addDoc(collection(db, 'games'), gameData);
-        console.log('game added')
-        location.reload();
     }
+    document.getElementById('auth-toast-body').innerHTML = 'Game added to your collection.';
+    authToastBS.show();
+    setTimeout(function() {
+        location.reload();
+    }, 1000);
 }
 
 export async function deleteGame(uid, bggID) {

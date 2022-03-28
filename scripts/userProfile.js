@@ -92,7 +92,6 @@ onAuthStateChanged(auth, (user) => {
 
     if (user) {
         // console.log(user);
-        // User is signed in, see docs for a list of available properties
         // Adjust columns if user is viewing their own profile
         document.getElementById('game-table-col').className = 'offset-md-1 col-md-5 col-12';
         document.getElementById('update-user-info-col').style.display = 'inline';
@@ -103,23 +102,40 @@ onAuthStateChanged(auth, (user) => {
         document.getElementById('email-update').placeholder = user.email;
         document.getElementById('color-update').value = thisUser.color;
 
+        // Edit the Profile Navbar
+        document.getElementById('login-button').style.display = 'none';
+        const signedInItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInItems.length; i++) {
+            signedInItems[i].style.display = 'inline';
+        }
+        document.getElementById('profile-link').href = `user-profile.html?id=${user.uid}`;
+        authModalBS.hide();
     } else {
         // User is signed out
         document.getElementById('game-table-col').className = 'offset-md-1 col-md-11 col-12';
         document.getElementById('update-user-info-col').style.display = 'none';
+        // User is signed out
+        document.getElementById('logout-button').style.display = 'none';
+        const signedInItems = document.getElementsByClassName('signed-in-only');
+        for (let i = 0; i < signedInItems.length; i++) {
+            signedInItems[i].style.display = 'none';
+        }
+        authModalBS.hide();
     }
 });
 
 // Account Deletion
 document.getElementById('delete-account-button').addEventListener('click', function () {
+    authModalBS.hide();
     deleteAccount();
 }, false);
 
 async function deleteAccount() {
     if (deleteAccountConfirm) {
+
         // Loop through games and delete their userRef from each one
         thisUserGames.forEach((game) => {
-            deleteGame(userUID, game.bggID);
+            deleteGame(auth.currentUser.uid, game.bggID);
         });
 
         // Delete their account

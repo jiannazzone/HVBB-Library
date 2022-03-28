@@ -69,6 +69,7 @@ onAuthStateChanged(auth, (user) => {
         for (let i = 0; i < signedInItems.length; i++) {
             signedInItems[i].style.display = 'none';
         }
+        authModalBS.hide();
     }
 });
 
