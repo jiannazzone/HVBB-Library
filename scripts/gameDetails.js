@@ -1,6 +1,6 @@
 // Load game details from Board Game Geek
 
-import { getThisGame, getGameOwners, addGame } from "./database.js";
+import { getThisGame, getGameOwners, addGame, hex2hsl } from "./database.js";
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
 
 const auth = getAuth();
@@ -110,7 +110,9 @@ async function displayOwners() {
         ownersDiv.innerHTML = '<h2>Owners</h2>';
         let ownersHTML = '';
         gameOwners.forEach((owner) => {
-            ownersHTML += `<span class="game-owner" style="background-color:${owner.data().color}; border:1px solid darkolivegreen;" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">${owner.data().name['first']} ${owner.data().name['last'].slice(0, 1)}</span>`
+            let ownerColor = owner.data().color;
+            let ownerTextColor = hex2hsl(ownerColor);
+            ownersHTML += `<span class="game-owner" style="background-color: ${ownerColor};color:${ownerTextColor};" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">${owner.data().name['first']} ${owner.data().name['last'].slice(0, 1)}</span>`
         });
         ownersDiv.innerHTML += ownersHTML;
     }
