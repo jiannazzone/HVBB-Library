@@ -10,21 +10,24 @@ const authModalBS = new bootstrap.Modal(authModal);
 
 function makeAPIcall(val) {
 
-if (val == '') {
-    clearSearch('gameInput');
-    return;
-}
+    if (val == '') {
+        clearSearch('gameInput');
+        return;
+    }
 
     let thisUrl = "https://boardgamegeek.com/xmlapi2/search?type=boardgame,boardgameexpansion&query=" + val.replace(/\s/g, "+"); // Spaces are replaced with a + per API instructions
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            if (firstSearch) {
-                setTimeout(() => { createGameList(this); }, 250);
-                firstSearch = false;
-            } else {
+            if (val.length >= 3) {
                 createGameList(this);
             }
+            // if (firstSearch) {
+            //     setTimeout(() => { createGameList(this); }, 250);
+            //     firstSearch = false;
+            // } else {
+            //     createGameList(this);
+            // }
         }
     };
     xmlhttp.open("GET", thisUrl, true);
@@ -46,17 +49,21 @@ function createGameList(xml) {
     let x, i, xmlDoc, txt;
     xmlDoc = xml.responseXML;
     x = xmlDoc.getElementsByTagName('item');
-    
+
     // Create the game name and append the year if possible
     if (Number(xmlDoc.getElementsByTagName('items')[0].getAttribute('total')) > 0) {
         for (i = 0; i < x.length; i++) {
-            const gameId = Number(x[i].id);
-            const gameName = x[i].getElementsByTagName('name')[0].getAttribute('value');
-            let gameYear = '';
-            if (x[i].getElementsByTagName('yearpublished')[0] != undefined) {
-                gameYear =  ` (${x[i].getElementsByTagName('yearpublished')[0].getAttribute('value')})`;
+
+            // Limit to 25 results
+            if (i < 25) {
+                const gameId = Number(x[i].id);
+                const gameName = x[i].getElementsByTagName('name')[0].getAttribute('value');
+                let gameYear = '';
+                if (x[i].getElementsByTagName('yearpublished')[0] != undefined) {
+                    gameYear = ` (${x[i].getElementsByTagName('yearpublished')[0].getAttribute('value')})`;
+                }
+                gameList[gameId] = `${gameName}${gameYear}`;
             }
-            gameList[gameId] = `${gameName}${gameYear}`;
         }
     }
 
