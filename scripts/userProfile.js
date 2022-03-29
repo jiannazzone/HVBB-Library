@@ -19,10 +19,11 @@ const authModalBS = new bootstrap.Modal(authModal);
 
 // Get Users Games and populate table
 const thisUserGames = await getUserGames(userUID);
-const gameTable = document.getElementById('game-collection');
+const gameTable = document.getElementById('game-collection-body');
 
 if (thisUserGames.length > 0) {
     let tableHTML = '';
+    document.getElementById('game-collection-header').innerHTML = `${thisUserGames.length} Games`;
     thisUserGames.forEach((game) => {
         tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td><button class="btn btn-sm btn-danger signed-in-only" type="button" id="${game.bggID}-delete"><i class="bi bi-trash-fill"></i></button></td></tr>`;
     });
