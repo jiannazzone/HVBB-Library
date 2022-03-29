@@ -23,6 +23,10 @@ a.navbar-brand>img {
     padding-right: 10px;
 }
 
+td {
+    vertical-align: middle;
+}
+
 /* Index styling */
 
 table#game-collection-table>thead {
@@ -116,18 +120,17 @@ img#game-image {
 }
 
 /* Game List Styling */
-span.game-owner {
-    padding: 5px;
+.col-sm.game-owner {
+    padding: 2px;
     border-radius: 5px;
-    margin: 2px;
-    width: auto;
     border: 1px solid black;
+    text-align: center;
+    cursor: pointer;
 }
 
 td.game-name, span.game-owner {
     cursor: pointer;
     min-width: none;
-    vertical-align: middle;
 }
 
 #game-owners-card {

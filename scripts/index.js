@@ -14,7 +14,10 @@ let tableHTML = '';
 allGames.forEach((game) => {
     
     // Add game name to left column. Clicking on name takes you detail page
-    tableHTML += `<tr class="game-row gy-5"><td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td><td class="game-owners"><div class="row justify-content-start align-items-center">`;
+    tableHTML += `<tr class="game-row gy-5">
+                    <td class="game-name w-auto" onclick="location.href='game-info.html?id=${game.bggID}'">${game.bggName}</td>
+                    <td class="w-auto">
+                        <div class="row align-items-center" style="margin:0px;">`;
 
     // Add owners to right column. Each owner in a span with appropriate coloring
     let ownersHTML = '';
@@ -23,10 +26,8 @@ allGames.forEach((game) => {
         let ownerTextColor = hex2hsl(ownerColor);
 
         ownersHTML +=
-            `<div class="col-sm">
-                <span class="game-owner" style="background-color:${ownerColor};color:${ownerTextColor};" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">
+            `<div class="col-sm game-owner" style="background-color:${ownerColor};color:${ownerTextColor};" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">
                 ${owner.data().name['first']} ${owner.data().name['last'].slice(0,1)}
-                </span>
             </div>`;
     });
     tableHTML += `${ownersHTML}</div></td></tr>`;
