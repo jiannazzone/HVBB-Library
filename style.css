@@ -23,6 +23,23 @@ a.navbar-brand>img {
     padding-right: 10px;
 }
 
+/* Index styling */
+
+table#game-collection-table>thead {
+    position: sticky;
+    top: 0;
+}
+
+/* table#game-collection-table>tbody {
+    overflow: auto;
+    max-height: 300px;
+} */
+
+div#table-col {
+    max-height: 70vh;
+    overflow: scroll;
+}
+
 /* Log In Modal Styling */
 #display-name-color-modal-form {
     display: none;

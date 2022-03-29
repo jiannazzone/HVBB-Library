@@ -9,7 +9,7 @@ const authModalBS = new bootstrap.Modal(authModal);
 // Get all games in master library
 let allGames = await getAllGames();
 
-const tableBodyHTML = document.getElementById('game-collection');
+const tableBodyHTML = document.getElementById('game-collection-body');
 let tableHTML = '';
 allGames.forEach((game) => {
     
