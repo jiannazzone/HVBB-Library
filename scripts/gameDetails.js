@@ -1,6 +1,6 @@
 // Load game details from Board Game Geek
 
-import { getThisGame, getGameOwners, addGame, hex2hsl } from "./database.js";
+import { getThisGame, getGameOwners, addGame, hex2hsl, deleteGame } from "./database.js";
 import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
 
 const auth = getAuth();
@@ -21,6 +21,11 @@ makeAPIcall();
 const addGameButton = document.getElementById('add-game-button');
 addGameButton.addEventListener('click', function () {
     addGame(userUID, gameID, document.getElementById('game-title').innerHTML);
+}, false);
+
+// Listen for Remove Game
+document.getElementById('remove-game-button').addEventListener('click', async function () {
+    await deleteGame(userUID, gameID);
 }, false);
 
 function makeAPIcall() {
@@ -109,18 +114,27 @@ async function getGameDetails(xml) {
 async function displayOwners() {
     // Get owners from Firestore
     const thisGame = await getThisGame(gameID);
+    console.log(thisGame.ref.path);
     const ownersDiv = document.getElementById('game-owners-card');
-    if (thisGame != null) {
+    if (thisGame != null || thisGame != undefined) {
         const gameOwners = await getGameOwners(thisGame.data().owners);
         // Create HTML elements
         ownersDiv.innerHTML = '<h2>Owners</h2>';
-        let ownersHTML = '';
+        let ownersHTML = '<div class="row d-flex justify-content-end" style="margin:0px;">';
         gameOwners.forEach((owner) => {
             let ownerColor = owner.data().color;
             let ownerTextColor = hex2hsl(ownerColor);
-            ownersHTML += `<span class="game-owner" style="background-color: ${ownerColor};color:${ownerTextColor};" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">${owner.data().name['first']} ${owner.data().name['last'].slice(0, 1)}</span>`
+            ownersHTML +=
+                `<div class="col-sm game-owner" style="background-color:${ownerColor};color:${ownerTextColor};max-width:25%;" onclick="location.href='user-profile.html?id=${owner.ref.path.split('/')[1]}'">
+                    ${owner.data().name['first']} ${owner.data().name['last'].slice(0, 1)}
+                </div>`;
+
+            if (owner.ref.path.split('/')[1] == userUID) {
+                document.getElementById('add-game-button').style.display = 'none';
+                document.getElementById('remove-game-button').style.display = 'inline';
+            }
         });
-        ownersDiv.innerHTML += ownersHTML;
+        ownersDiv.innerHTML += `${ownersHTML}</div>`;
     } else {
         ownersDiv.innerHTML = '<h2 style="color:darkolivegreen;">Owners</h2><h4 style="color:darkolivegreen;">Nobody owns this one!</h4>'
     }

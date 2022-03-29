@@ -115,8 +115,8 @@ img#game-image {
 }
 
 /* Game List Styling */
-.col-sm.game-owner {
-    padding: 2px;
+.col-sm.game-owner, span.game-owner {
+    padding: 5px;
     border-radius: 5px;
     border: 1px solid black;
     text-align: center;
