@@ -42,13 +42,14 @@
                             data-bs-toggle="dropdown" aria-expanded="false">Profile
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li class="signed-in-only"><a class="dropdown-item" href="" id="profile-link">My Profile</a></li>
+                            <li class="signed-in-only"><a class="dropdown-item" href="" id="profile-link">My Profile</a>
+                            </li>
                             <li>
-                                <div class="dropdown-item" id="login-button" data-bs-toggle="modal"
-                                    data-bs-target="#auth-modal">Login</div>
+                                <a class="dropdown-item" id="login-button" data-bs-toggle="modal"
+                                    data-bs-target="#auth-modal">Login</a>
                             </li>
                             <li class="signed-in-only">
-                                <div class="dropdown-item text-danger" id="logout-button">Logout</div>
+                                <a class="dropdown-item text-danger" id="logout-button">Logout</a>
                             </li>
                         </ul>
                     </li>
@@ -89,8 +90,10 @@
 
                 <div class="row text-nowrap">
                     <div class="col d-flex justify-content-evenly mt-2">
-                        <button type="button" class="btn btn-primary signed-in-only" id="add-game-button">Add Game</button>
-                        <button type="button" class="btn btn-danger signed-in-only" id="remove-game-button">Remove Game</button>
+                        <button type="button" class="btn btn-primary signed-in-only" id="add-game-button">Add
+                            Game</button>
+                        <button type="button" class="btn btn-danger signed-in-only" id="remove-game-button">Remove
+                            Game</button>
                     </div>
                 </div>
 
@@ -137,8 +140,8 @@
                             <input type="text" class="form-control" id="last-name-input" placeholder="Last Name">
                         </div>
                         <label for="color-input" class="form-label">Select Your Color</label>
-                        <input type="color" class="form-control form-control-color" id="color-input"
-                            value="#ffffff" title="Choose your color">
+                        <input type="color" class="form-control form-control-color" id="color-input" value="#ffffff"
+                            title="Choose your color">
                     </form>
                     <div class="text-danger" id="login-error-display"></div>
                 </div>

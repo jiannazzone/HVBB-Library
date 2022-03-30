@@ -1,4 +1,4 @@
-import { getThisUser, getUserGames, updateUser, deleteGame } from "./database.js";
+import { getThisUser, getUserGames, updateUser, deleteGame, removeUserFromDB } from "./database.js";
 import { getAuth, onAuthStateChanged, updateEmail, deleteUser } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
 
 const params = new URLSearchParams(location.search);
@@ -145,10 +145,14 @@ async function deleteAccount() {
             document.getElementById('auth-toast-body').innerHTML = 'Account deleted.';
             authToastBS.show();
 
+            // Remove user from firestore 'users' collection
+            removeUserFromDB();
+
             setTimeout(function () {
                 location.href = 'index.html';
             }, 2000);
 
+            // Reset UI
             document.getElementById('delete-account-button').innerHTML = 'Delete Account';
             deleteAccountConfirm = false;
 

@@ -69,32 +69,6 @@ const gameConverter = {
     }
 };
 
-/*
-async function getUsers(db) {
-    let allGames = [];
-    const userRef = collection(db, 'users');
-    const userSnap = await getDocs(userRef);
-    userSnap.forEach((doc) => {
-        if (doc.exists()) {
-            const thisGame = new Game(doc.data().bggID, doc.data().bggName);
-            thisGame.owners = getGameOwners(doc.data().owners)
-            allGames.push(thisGame);
-        } else {
-            console.log('No document.');
-        }
-    });
-    console.log(allUsers);
-    retrieveUserGames(db, allGames);
-}
-
-async function retrieveUserGames(db, allUsers) {
-    // Try printing out all the games
-    const firstUser = allUsers[0];
-    const data = await getDoc(firstUser.gamesOwned[0]);
-    console.log(data.data());
-}
-*/
-
 export async function getGameOwners(ownerRefs) {
     let allOwners = [];
     for (const ownerRef of ownerRefs) {
@@ -279,4 +253,8 @@ export function hex2hsl(color) {
         // Dark color
         return '#ffffff'; // white text
     }
+}
+
+export async function removeUserFromDB(uid) {
+    await deleteDoc(doc(db, 'users', uid));
 }
