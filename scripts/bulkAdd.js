@@ -21,20 +21,57 @@ document.getElementById('bulk-submit-button').addEventListener('click', function
 
 // Listen for accept
 document.getElementById('add-selected-button').addEventListener('click', async function () {
+    let unmatchedGames = [];
+    
     // Determine which games are selected
     const allCheckboxes = document.getElementsByClassName('game-checkbox');
-    console.log(allCheckboxes);
+    const allGameNames = document.getElementsByClassName('game-name');
+
     for (let i = 0; i < allCheckboxes.length; i++) {
         if (allCheckboxes[i].checked) {
+            // Match was found and game was checked
             const idAndName = allCheckboxes[i].id.split('_')
             await addGame(userUID, Number(idAndName[0]), idAndName[1]);
+        } else if (allCheckboxes[i].id == '0_') {
+            // No match was found
+            unmatchedGames.push(allGameNames[i].innerHTML);
         }
     }
-    location.href = `user-profile.html?id=${userUID}`;
+    // location.href = `user-profile.html?id=${userUID}`;
+    console.log(unmatchedGames);
+}, false);
+
+// Listen for check/uncheck/reset buttons
+document.getElementById('check-all-button').addEventListener('click', function () {
+    const allCheckboxes = document.getElementsByClassName('game-checkbox');
+    
+    for (let i = 0; i < allCheckboxes.length; i++) {
+        if (!allCheckboxes[i].disabled) {
+            allCheckboxes[i].checked = true;
+        }
+    }
+}, false);
+
+document.getElementById('uncheck-all-button').addEventListener('click', function () {
+    const allCheckboxes = document.getElementsByClassName('game-checkbox');
+    
+    for (let i = 0; i < allCheckboxes.length; i++) {
+        if (!allCheckboxes[i].disabled) {
+            allCheckboxes[i].checked = false;
+        }
+    }
+}, false);
+
+document.getElementById('cancel-button').addEventListener('click', function () {
+    location.reload();
 }, false);
 
 function bulkAddGames(textInput) {
     console.log('Processing Bulk Add');
+
+    // Hide instructions
+    document.getElementById('instructions-row').style.display = 'none';
+
     let newGames = textInput.split(',');
 
     // Check if the input text was CSV, tab-delimited, or newline delimited
@@ -97,8 +134,9 @@ function bulkAddGames(textInput) {
         tableHTML += `<tr class="gy-5"><td><div class="form-check d-flex"><input class="form-check-input game-checkbox" type="checkbox" value="" id="${gameMatches[i].bggID}_${gameMatches[i].bggName}"`
         
         if (gameMatches[i].bggID != 0) {
-            tableHTML += 'checked';
-        
+            tableHTML += ' checked';
+        } else {
+            tableHTML += ' disabled';
         }
         tableHTML += `></div></td><td class="game-name w-auto">${newGames[i]}</td>`;
 
@@ -120,7 +158,8 @@ auth.onAuthStateChanged(async user => {
         const thisUser = await getThisUser(userUID);
 
         // Set Page Elements
-        document.getElementById('name-title').innerHTML = `${thisUser.first} ${thisUser.last}`;
+        document.getElementById('loading-row').style.display = 'none';
+        document.getElementById('instructions-row').style.display = 'block';
         document.title = `Bulk Add: ${thisUser.first} ${thisUser.last}`;
 
         // Enable button to submit

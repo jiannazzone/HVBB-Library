@@ -154,7 +154,7 @@ td.game-name {
     width: 100%;
 }
 
-div#bulk-results {
+div#bulk-results, div#instructions-row {
     display: none;
 }
 
