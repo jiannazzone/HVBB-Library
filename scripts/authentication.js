@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-auth.js';
-import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
+import { getFirestore, doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/9.6.8/firebase-firestore.js';
 
 // TODO: Replace the following with your app's Firebase project configuration
 // See: https://firebase.google.com/docs/web/learn-more#config-object
@@ -73,23 +73,34 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-function createUser() {
+async function createUser() {
     const email = document.getElementById('email-input').value;
     const password = document.getElementById('password-input').value;
+    const code = document.getElementById('secret-code').value;
 
-    createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+    // Check if typed code matches code in database
+    const db = getFirestore(app);
+    const codeSnap = await getDoc(doc(db, 'secrets', 'registration-code'));
 
-            // Signed in 
-            const user = userCredential.user;
-            console.log('signed in');
-            setUserPrefs(auth.currentUser);
+    if (codeSnap.data().code == code) {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
 
-        })
-        .catch((error) => {
-            const errorCode = error.code;
-            console.log(error.code);
-        });
+                // Signed in 
+                const user = userCredential.user;
+                console.log('signed in');
+                setUserPrefs(auth.currentUser);
+
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                console.log(error.code);
+            });
+    } else {
+        const secretCodeFeedback = document.getElementById('secret-code-feedback');
+        secretCodeFeedback.innerHTML = 'Incorrect Secret Code';
+        secretCodeFeedback.style.display = 'inline'; 
+    }
 }
 
 function signIn() {
